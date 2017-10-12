@@ -1,0 +1,19 @@
+﻿@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}
+body {
+  font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  /* font-size: 13px; */
+  line-height: 1.846;
+  color: #666666;
+  background-color: #ffffff;
+}
+#navbar-container {
+ box-shadow: 0 2px 5px rgba(0,0,0,.26) !important;
+}

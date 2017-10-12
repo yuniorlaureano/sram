@@ -1,0 +1,109 @@
+﻿.transparent-nav-container {
+    margin: 8px auto;
+    max-width: 96%;
+    padding: 0 !important;
+    background-color:rgb(0, 0, 77);
+    height: 40%;
+}
+
+.transparent-nav-container .transparent-nav-child-brand {
+   margin: auto !important;
+   background-color: #f1f4f7;
+   padding: 5px;
+   float: left;
+   font-size:17px;
+   color:rgb(0, 0, 77);
+   border-radius: 0% 50%;
+   font-weight: 900;
+   
+   }
+
+h5.text-info {
+    display:inline;
+}
+
+select {
+    text-transform: capitalize !important
+}
+
+
+#reportes-por-auditoria-table thead {
+   background-color:lightgreen;
+   margin: 0;
+   padding: 0;
+}
+
+
+
+#reportes-por-auditoria-table tbdoy td {
+   background-color:lightgreen;
+   border: solid 1px gray;
+   margin: 0;
+   padding: 0;
+}
+
+select,input,label,li,button,a,table {
+    font-size: 13px !important;
+}
+
+input, select {
+    border: solid 1px gray !important;
+}
+/*
+ navbar-brand
+#mainnav{height:100%;background-color:rgb(230, 230, 230);
+
+navbar-brand{
+    background-color
+
+
+--------------
+menu-popover .single-content {
+    color:
+
+----------------------
+mainnav-menu>li>a.hover{color
+---------------------------------------
+#mainnav-menu>li>a:hover,
+ */
+
+.hide-tr-footable {
+    display:none;
+}
+
+.floating-button-yl {
+    display: block;
+    background-color: #42a5f5;
+    color: #fff;
+    cursor: pointer;
+    position: fixed;
+    bottom: 90px;
+    right: 8px;
+    z-index: 999;
+    opacity: 1;
+    padding: 10px;
+    font-size: 1.5em;
+    border-radius: 100%;
+    box-shadow: none;
+    transition: all .15s;
+}
+
+    .floating-button-yl:hover {
+        opacity: 1;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        transform: scale(1.1);
+        transition: all .15s;
+    }
+
+    .floating-button-yl:active {
+        box-shadow: 0 0 10px rgba(0,0,0,0.2) !important;
+        transform: scale(1.05);
+        transition: all .15s;
+    }
+
+    .floating-button-yl > i {
+        display: block;
+        width: 1em;
+        height: 1em;
+        line-height: 1.1em;
+    }

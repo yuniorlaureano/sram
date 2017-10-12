@@ -1,0 +1,18 @@
+﻿@model List<Entities.Auditoria>
+
+@{
+    ViewBag.Title = "Pending";
+}
+
+<div class="row">
+    @RenderPage("~/Views/Shared/_AuditTable.cshtml")
+</div>
+
+
+@RenderPage("~/Views/Shared/_CreditModal.cshtml")
+@RenderPage("~/Views/Shared/_ClaimModal.cshtml")
+@RenderPage("~/Views/Shared/_AuditModal.cshtml")
+
+@section scripts{
+    <script src="~/Scripts/sram/auditory.js"></script>
+}

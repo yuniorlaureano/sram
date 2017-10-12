@@ -1,0 +1,122 @@
+﻿@model List<Entities.Auditoria>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pendientes a Auditar</h3>
+            </div>
+
+            <!-- Foo Table - Expand / Collapse All Rows -->
+            <!--===================================================-->
+            <div class="panel-body">
+                
+                <div class="pad-btm form-inline">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pad-btm">
+                                <button id="demo-foo-collapse" class="btn btn-info">Collapse All</button>
+                                <button id="demo-foo-expand" class="btn btn-warning">Expand All</button>
+                                <label class="form-inline">
+                                    Show
+                                    <select id="demo-show-entries" class="form-control input-sm">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                    entries
+                                </label>
+                            </div>                            
+                        </div>
+                        <div class="col-sm-6 text-xs-center text-right">
+                            <div class="form-group">
+                                <input id="demo-foo-search" type="text" placeholder="Search" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="pending-table" class="table toggle-circle" data-page-size="10">
+                    <thead>
+                        <tr>
+                            <th data-sort-ignore="true"></th>
+                            <th data-toggle="true" class="footable-first-column">Razón Social</th>
+                            <th>SubscriberId</th>
+                            <th>Teléfono</th>
+                            <th>Canvass</th>
+                            <th>Book Code</th>
+                            <th>Ejecutivo</th>
+                            <th>Unidad</th>
+                            <th>Fecha RCP</th>
+                            <th>Cargo</th>
+                            <th>Call Id</th>
+                            <th data-sort-ignore="true"></th>
+                            <th data-hide="all">Control Verbal Call Id</th>
+                            <th data-hide="all">Conmentario Ejecutivo</th>
+                            <th data-hide="all">PDC Dimmas</th>
+                            <th data-hide="all">PDC Codetel</th>
+                            <th data-hide="all">Compañía</th>
+                            <th data-hide="all">Tipo de Servicio</th>
+                            <th data-hide="all">Auditor Asignado</th>
+                            <th data-hide="all">Venta</th>
+                            <th data-hide="all">Previo Call Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox"/>
+                                </td>
+                                <td>@item.RazonSocial</td>
+                                <td>@item.SubscriberId</td>
+                                <td>@item.Telefono</td>
+                                <td>@item.Canvass</td>
+                                <td>@item.BookCode</td>
+                                <td>@item.Ejecutivo</td>
+                                <td>@item.Unidad</td>
+                                <td>@item.FechaRPC</td>
+                                <td>@item.Cargo</td>
+                                <td>@item.CallId</td>
+                                <td>
+                                    <div class="btn-group-xs">
+                                        @if(@item.HassCredit)
+                                        {
+                                            <button type="button" class="btn btn-primary show-credit">Credit</button>
+                                        }
+                                        
+                                        @if(@item.HassClaim)
+                                        {
+                                            <button type="button" class="btn btn-info show-claim">Claim</button>
+                                        }                                         
+                                        <button type="button" class="btn btn-default audit-command-button">Auditar</button>
+                                    </div>
+                                </td>
+                                <td>@item.ControlVerballCallId</td>
+                                <td>@item.ComentarioEjecutivo</td>
+                                <td>@item.PDCDimmas</td>
+                                <td>@item.PDCCodetel</td>
+                                <td>@item.Compania</td>
+                                <td>@item.TipoDeServicio</td>
+                                <td>@item.AuditorAsignado</td>
+                                <td>@item.Venta</td>
+                                <td>@item.PrevioCallId</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <div class="text-right">
+                                    <ul class="pagination"></ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

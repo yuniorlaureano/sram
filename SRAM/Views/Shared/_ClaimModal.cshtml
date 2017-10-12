@@ -1,0 +1,36 @@
+﻿<div class="modal" id="claim-modal" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title">Cliente con Reclamos</h4>
+            </div>
+
+
+            <!--Modal body-->
+            <div class="modal-body">
+                <table class="table">
+                    <caption class="text-center"><span class="text-dark">Cliente con Reclamos</span></caption>
+                    <thead>
+                        <tr>
+                            <th>No. Reclamo</th>
+                            <th>Libro</th>
+                            <th>Descripcion Reclamo</th>
+                            <th>Comentario Cliente</th>
+                            <th>Canv Code</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbdoy-claimswithclaims-' + idSubscriber + '"></tbody>
+                </table>
+            </div>
+
+
+            <!--Modal footer-->
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

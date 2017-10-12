@@ -1,0 +1,110 @@
+﻿ <!--Large Bootstrap Modal-->
+<!--===================================================-->
+<div id="audit-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
+                <h4 class="modal-title" id="myLargeModalLabel">Auditoria</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-condensed">
+                    <tr>
+                        <td>
+                            <h5>Datos de la Transacción</h5>
+                            <ul class="list-group" id="datos-de-la-transacción"></ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>Validaciones</h5>
+
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta1">
+                                <label for="pregunta1"> Se informa al cliente que la llamada está siendo grabada?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta2">
+                                <label for="pregunta2">Se identifica en la conversación el Nombre de la Empresa?</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>Datos Vitales</h5>
+                            
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta3">
+                                <label for="pregunta3">PDC se identifica con Nombre Completo (Difiere o No)?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta4">
+                                <label for="pregunta4">PDC Indica Su Cargo o Posición en la Empresa?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta5">
+                                <label for="pregunta5">PDC confirma es la persona autorizada a negociar contratos de publicidad para su empresa?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta6">
+                                <label for="pregunta6">Vendedor detalla monto mensual?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta7">
+                                <label for="pregunta7">Vendedor especifica vigencia de la facturación?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta8">
+                                <label for="pregunta8">Vendedor especifica Directorio contratado?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta9">
+                                <label for="pregunta9">PDC Confirma estar de Acuerdo?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta10">
+                                <label for="pregunta10">Ejecutivo sigue el Orden del Script?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta11">
+                                <label for="pregunta11">Ejecutivo Omite/Cambia palabras del Script?</label>
+                            </div>
+                            <div class="checkbox">
+                                <input type="checkbox" class="magic-checkbox" id="pregunta12">
+                                <label for="pregunta12">Vendedor describe los servicios contratados (Item, características, clasificado)?</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>Comentarios</h5>
+                            <textarea id="comment-audit" placeholder="Message" rows="2" class="form-control" style="width:100%"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h5>Otras Validaciones</h5>
+                            <div class="form-inline">
+                                <div class="checkbox">
+                                    <input type="checkbox" class="magic-checkbox" id="descargo-administrativo">
+                                    <label for="descargo-administrativo">Descargo Administrativo</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input type="checkbox" class="magic-checkbox" id="descargo-re-auditoría">
+                                    <label for="descargo-re-auditoría">Descargo Re-auditoría</label>
+                                </div>
+                            </div>                            
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--===================================================-->
+<!--End Large Bootstrap Modal-->
