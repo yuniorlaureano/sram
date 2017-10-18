@@ -167,7 +167,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AssignController.cs" />
     <Compile Include="Controllers\AssingmentController.cs" />
+    <Compile Include="Controllers\AuditorController.cs" />
     <Compile Include="Controllers\AuditoryController.cs" />
     <Compile Include="Controllers\PendingController.cs" />
     <Compile Include="Global.asax.cs">
@@ -177,9 +179,11 @@
     <Compile Include="Models\Auditors.cs" />
     <Compile Include="Models\AuditResult.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\InputSearchAuditory.cs" />
     <Compile Include="Models\PenddingAssigned.cs" />
     <Compile Include="Models\PenddingAudit.cs" />
     <Compile Include="Models\ReassignedAudit.cs" />
+    <Compile Include="Models\ReassignInput.cs" />
     <Compile Include="Models\SubscriberCanvBook.cs" />
     <Compile Include="Models\SubscriberClaimWithClaims.cs" />
     <Compile Include="Models\SubscriberClaimWithCredit.cs" />
@@ -1612,7 +1616,9 @@
     <Content Include="css\demo\fonts\nifty-demo-icons.woff" />
     <Content Include="css\demo\fonts\nifty-demo-icons.woff2" />
     <None Include="Properties\PublishProfiles\SRAM.pubxml" />
+    <None Include="Properties\PublishProfiles\SRAM_RD.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\handlebars-v4.0.10.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -1632,11 +1638,17 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sram\assign.js" />
     <Content Include="Scripts\sram\assingment.js" />
     <Content Include="Scripts\sram\auditory.js" />
+    <Content Include="Scripts\sram\class.js" />
     <Content Include="Scripts\sram\pending.js" />
     <Content Include="Scripts\Utils.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Assign\View1.cshtml" />
+    <Content Include="Views\Assign\Index.cshtml" />
+    <Content Include="Views\Auditory\SearchAuditedAccount.cshtml" />
+    <None Include="Views\Shared\Handlebar\PendingSummary.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1668,6 +1680,7 @@
     <Content Include="Views\Shared\_ClaimModal.cshtml" />
     <Content Include="Views\Shared\_CreditModal.cshtml" />
     <Content Include="Views\Shared\_AuditModal.cshtml" />
+    <Content Include="Views\Shared\Handlebar\Templates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1675,6 +1688,7 @@
     <Folder Include="Content\plugins\fullcalendar\less\" />
     <Folder Include="Content\Report\" />
     <Folder Include="css\BDM\" />
+    <Folder Include="Views\Auditor\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

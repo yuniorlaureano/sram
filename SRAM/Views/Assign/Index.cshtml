@@ -1,0 +1,72 @@
+﻿@model List<Entities.UnAssignedAudit>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Row selection and deletion (multiple rows) -->
+        <!--===================================================-->
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Asignaciones Pendientes</h3>
+            </div>
+            <hr style="border: solid 1px rgb(0, 0, 153);" />
+            <div class="panel-body">
+                @if (ViewBag.totalAsignado > 0)
+                {
+                    <div class="alert alert-primary col-sm-12 text-center" style="font-size:15px;">
+                        <button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
+                        <strong>Info!</strong> Se asignaron un total de, @ViewBag.totalAsignado cuentas. : )
+                    </div>
+                }
+
+                <select class="selectpicker" id="auditors-select-piker" multiple title="Auditores" data-width="50%" data-url="@Url.Action("GetAuditors", "Auditor")"></select>
+                <table id="pedding-assignment" class="table table-striped" width="100">
+                    <thead>
+                        <tr>
+                            <th>Fecha RDV</th>
+                            <th>Cantidad</th>
+                            <th>Asignar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="sales-date">@item.SalesDate</td>
+                                <td class="pn-assig-acc">@item.Cantidad</td>
+                                <td>
+                                    <button class="btn btn-primary asignar-pendiente"><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-danger" style="text-align:right">Total de pendientes:</td>
+                            <td class="text-danger" id="total-pending"></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <form action="@Url.Action("AssignAudit", "Assign")" method="post" id="form-assign-auditory">
+                    <input type="hidden" name="date" value="" />
+                    <input type="hidden" name="auditor" value="" />
+
+                </form>
+            </div>
+        </div>
+        <!--===================================================-->
+        <!-- End Row selection and deletion (multiple rows) -->
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Content/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/sram/class.js"></script>
+    <script src="~/Scripts/sram/assign.js"></script>
+}

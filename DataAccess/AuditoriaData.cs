@@ -221,20 +221,44 @@ using System.Globalization;namespace DataAccess
         /// <param name="Auditor"></param>
         /// <param name="UserCode"></param>
         /// <returns>bool</returns>
-        public bool ReAssignAudit(ReassignedAudit reasignedAudit)
+        //public bool ReAssignAudit(ReassignedAudit reasignedAudit)
+        //{
+        //    bool resultset = false;
+
+        //    OracleParameter[] oracleParameter = new OracleParameter[] { 
+        //        new OracleParameter("v_AssignmentId", OracleDbType.Int32) { Value = reasignedAudit.AssignmentId },
+        //        new OracleParameter("v_Auditor", OracleDbType.Varchar2) { Value = reasignedAudit.Auditor },
+        //        new OracleParameter("v_UserCode", OracleDbType.Varchar2) { Value = reasignedAudit.UserCode }
+        //    };
+
+        //    try
+        //    {
+        //        resultset = oracleBasicsOperations.ExecuteNonQuery("sfa.sra_re_assign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
+        //        resultset = true;
+        //    }
+        //    catch (OracleException excep)
+        //    {
+        //        throw excep;
+        //    }
+
+        //    return resultset;
+
+        //}
+
+        public bool ReAssignAudit(string sentencia)
         {
             bool resultset = false;
 
             OracleParameter[] oracleParameter = new OracleParameter[] { 
-                new OracleParameter("v_AssignmentId", OracleDbType.Int32) { Value = reasignedAudit.AssignmentId },
-                new OracleParameter("v_Auditor", OracleDbType.Varchar2) { Value = reasignedAudit.Auditor },
-                new OracleParameter("v_UserCode", OracleDbType.Varchar2) { Value = reasignedAudit.UserCode }
+                new OracleParameter("in_sentencia", OracleDbType.Int32) { Value = sentencia , OracleDbType = OracleDbType.Varchar2 },
+                new OracleParameter("resultset", OracleDbType.Int32) { Direction = ParameterDirection.Output, OracleDbType = OracleDbType.Int32}
             };
 
             try
             {
-                resultset = oracleBasicsOperations.ExecuteNonQuery("sfa.sra_re_assign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
-                resultset = true;
+                oracleBasicsOperations.ExecuteNonQuery("sram.sp_assign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
+                resultset = Convert.ToInt32(oracleParameter[1].Value.ToString()) > 0;
+                this.CloseConnnection();
             }
             catch (OracleException excep)
             {
@@ -242,7 +266,6 @@ using System.Globalization;namespace DataAccess
             }
 
             return resultset;
-
         }
 
         /// <summary>
@@ -401,10 +424,10 @@ using System.Globalization;namespace DataAccess
         /// <param name="CallId"></param>
         /// <param name="PhoneNo"></param>
         /// <returns>List<PenddingAudit></returns>
-        public List<PenddingAudit> GetDoneAudits(string SubscrId, string Auditor, string SalesDate, string CreationDate, string CallId, string PhoneNo)
+        public List<Auditoria> GetDoneAudits(string SubscrId, string Auditor, string SalesDate, string CreationDate, string CallId, string PhoneNo)
         {
 
-            List<PenddingAudit> peddingAudit = null;
+            List<Auditoria> peddingAudit = null;
             DataSet resultset = null;
 
             DateTime? salesDate = null, creationDate = null;
@@ -428,7 +451,7 @@ using System.Globalization;namespace DataAccess
                 resultset = oracleBasicsOperations.ExecuteDataAdapter("sfa.sra_get_audits", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
 
                 peddingAudit = resultset.Tables[0].AsEnumerable().Select(
-                    trn => new PenddingAudit
+                    trn => new Auditoria
                     {
                         Status = trn["STATUS"].ToString(),
                         AssignmentId = trn["AssignmentId"].ToString(),

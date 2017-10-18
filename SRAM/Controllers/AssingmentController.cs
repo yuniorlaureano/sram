@@ -20,7 +20,6 @@ namespace SRAM.Controllers
 
         public JsonResult GetAuditors()
         {
-
             var auditors = new AuditorBusiness().GetAuditors();
 
             return Json(new { auditors = auditors }, JsonRequestBehavior.AllowGet);
@@ -86,20 +85,20 @@ namespace SRAM.Controllers
             return Json(new { subscriberBook = subscriberCanvAndBook }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public JsonResult ReAssign(List<Entities.ReassignedAudit> reassignedAudit)
-        {
-            bool resultset = false;
+        //[HttpPost]
+        //public JsonResult ReAssign(List<Entities.ReassignedAudit> reassignedAudit)
+        //{
+        //    bool resultset = false;
 
-            resultset = new AuditoriaBusiness().ReAssignAudit(reassignedAudit);
+        //    resultset = new AuditoriaBusiness().ReAssignAudit(reassignedAudit);
 
-            if (!resultset)
-            {
-                return Json("ERROR", JsonRequestBehavior.AllowGet);
-            }
+        //    if (!resultset)
+        //    {
+        //        return Json("ERROR", JsonRequestBehavior.AllowGet);
+        //    }
 
-            return Json("DONE", JsonRequestBehavior.AllowGet);
-        }
+        //    return Json("DONE", JsonRequestBehavior.AllowGet);
+        //}
 
         public JsonResult GetAcctInfoByAssignment(string AssignmentId)
         {
@@ -122,7 +121,7 @@ namespace SRAM.Controllers
         public JsonResult GetDoneAudits(string SubscrId, string Auditor, string SalesDate, string CreationDate, string CallId, string PhoneNo)
         {
 
-            IEnumerable<Entities.PenddingAudit> transaccion = null;
+            IEnumerable<Entities.Auditoria> transaccion = null;
 
             if (string.IsNullOrEmpty(SubscrId) && string.IsNullOrEmpty(Auditor) && string.IsNullOrEmpty(SalesDate) && string.IsNullOrEmpty(CreationDate)
                 && string.IsNullOrEmpty(CallId) && string.IsNullOrEmpty(PhoneNo))

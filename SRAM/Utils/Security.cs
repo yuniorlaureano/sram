@@ -15,9 +15,10 @@ namespace SRAM.Utils
         {
             dal = new Dal();
             string user = HttpContext.Current.User.Identity.Name;
-            
-            user = user.Replace("CSID\\", "");
-            
+            if (user.Substring(0, 4) == "CSID" && user.Length > 4)
+            {
+                user = user.Substring(5);
+            }
             return user;
 
         }
@@ -28,9 +29,9 @@ namespace SRAM.Utils
             var Session = HttpContext.Current.Session;
             string user = HttpContext.Current.User.Identity.Name;
 
-            if (user.Substring(0, 4) == "CSID")
+            if (user.Substring(0, 4) == "CSID" && user.Length > 4)
             {
-                user = user.Substring(5);
+                user = user.Substring(5) ;
                 //string userCode = dal.GetUserCode("Jose Nunez").Tables[0].Rows.Count > 0 ? dal.GetUserCode("Jose Nunez").Tables[0].Rows[0]["usr_codigo"].ToString() : "";
                 string userCode = dal.GetUserCode(user).Tables[0].Rows.Count > 0 ? dal.GetUserCode(user).Tables[0].Rows[0]["usr_codigo"].ToString() : "";
 

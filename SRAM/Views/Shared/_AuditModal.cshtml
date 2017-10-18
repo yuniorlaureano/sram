@@ -7,12 +7,57 @@
                 <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
                 <h4 class="modal-title" id="myLargeModalLabel">Auditoria</h4>
             </div>
-            <div class="modal-body">
-                <table class="table table-condensed">
+            <div class="modal-body" style="padding:0">
+                <table class="table table-condensed" style="margin:0">
                     <tr>
                         <td>
                             <h5>Datos de la Transacción</h5>
-                            <ul class="list-group" id="datos-de-la-transacción"></ul>
+                            <table class="table table-condensed table-striped table-bordered">
+                                <tr>
+                                    <th>Razón Social</th>
+                                    <th>SubscrId</th>
+                                    <th>Teléfono</th>
+                                    <th>Canvass</th>
+                                    <th>Book Code</th>
+                                    <th>Control Verbal Call Id</th>
+                                    <th>Auditor</th>
+                                    <th>Ejecutivo</th>
+                                    <th>AccountId</th>
+                                </tr>
+                                <tr>
+                                    <td class="trn-razon"></td>
+                                    <td class="trn-subscr"></td>
+                                    <td class="trn-tell"></td>
+                                    <td class="trn-canv"></td>
+                                    <td class="trn-book"></td>
+                                    <td class="trn-control"></td>
+                                    <td class="trn-auditor"></td>
+                                    <td class="trn-ejecutivo"></td>
+                                    <td class="trn-account"></td>
+                                </tr>
+                                <tr>
+                                    <th>Unidad</th>
+                                    <th>Fecha RCP</th>
+                                    <th>Cargo</th>
+                                    <th>Venta</th>
+                                    <th>Call Id</th>
+                                    <th>Comentario del Ejecutivo</th>
+                                    <th>PDC Dimmas</th>
+                                    <th>Compañía</th>
+                                    <th></th>                                    
+                                </tr>
+                                <tr>
+                                    <td class="trn-unidad"></td>
+                                    <td class="trn-fecha"></td>
+                                    <td class="trn-cargo"></td>
+                                    <td class="trn-venta"></td>
+                                    <td class="trn-call-id"></td>
+                                    <td class="trn-comentario"></td>
+                                    <td class="trn-pdc"></td>
+                                    <td class="trn-company"></td>
+                                    <td></td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                     <tr>
@@ -100,7 +145,7 @@
             </div>
             <div class="modal-footer">
                 <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
-                <button class="btn btn-primary">Guardar</button>
+                <button class="btn btn-primary" id="guardar-auditoria" data-url="@Url.Action("Audit", "Auditory")">Guardar</button>
             </div>
         </div>
     </div>

@@ -37,6 +37,8 @@ namespace Entities
         public string AuditorName { get; set; }
         public string AuditResult { get; set; }
         public string InvalidQuestions { get; set; }
+        public bool HassClaim { get; set; }
+        public bool HassCredit { get; set; }
 
     }
 }

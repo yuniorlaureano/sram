@@ -1,0 +1,91 @@
+﻿@model List<Entities.Auditoria>
+
+@{
+    ViewBag.Title = "SearchAuditedAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        @if (ViewBag.Error != null)
+        {
+        <!-- Warning Alert -->
+		<!--===================================================-->
+            <div class="alert alert-danger">
+                <button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
+                <strong>Warning!</strong> @ViewBag.Error : (
+            </div>
+        }
+        <div class="panel">
+            <div class="panel-heading">
+                <h4 class="panel-title">Buscar auditorias realizadas</h4>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+                    <div class="form-horizontal">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="demo-hor-inputpass">Auditores</label>
+                                <div class="col-sm-10">
+                                    <select name="Auditor" data-url="@Url.Action("GetAuditors", "Auditor")" class="form-control auditor-adm" style="max-width:100%;"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="demo-hor-inputemail">Fecha RDV</label>
+                                <div class="col-sm-10">
+                                    <div id="selectedPiker">
+                                        <input name="SalesDate" type="text" class="form-control picker" style="max-width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="demo-hor-inputemail">Fecha Auditoria</label>
+                                <div class="col-sm-10">
+                                    <div id="selectedPiker">
+                                        <input name="CreationDate" type="text" class="form-control picker" style="max-width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="demo-hor-inputpass">Subscriber Id</label>
+                                <div class="col-sm-10">
+                                    <input name="SubscrId" type="number" class="form-control" style="max-width: 100%;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="demo-hor-inputpass">Call Id</label>
+                                <div class="col-sm-10">
+                                    <input name="CallId" type="number" class="form-control" style="max-width: 100%;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="demo-hor-inputpass">Telefono</label>
+                                <div class="col-sm-10">
+                                    <input name="PhoneNo" type="number" class="form-control" style="max-width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10 text-right">
+                                    <input type="submit" id="search-audit" class="btn btn-info" value="Buscar" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @RenderPage("~/Views/Shared/_AuditTable.cshtml")
+</div>
+
+@section scripts{    
+    <script src="~/Scripts/sram/class.js"></script>
+    <script src="~/Scripts/sram/auditory.js"></script>
+    }

@@ -1,7 +1,5 @@
 ﻿$(function () {
 
-
-
     var pendingTable = $("#pending-table").footable();
 
     $('#demo-foo-collapse').on('click', function () {
@@ -24,8 +22,6 @@
         pendingTable.trigger('footable_filter', { filter: $(this).val() });
     });
 
-
-
     $("#pending-table").on('click', '.show-credit', function () {
         $('#credit-modal').modal().show('show');
     });
@@ -34,6 +30,8 @@
         $('#claim-modal').modal('show');
     });
 
+    $('.picker').datepicker({ autoclose: true });
+
     AuditoryModule.Init();
 
 });
@@ -41,27 +39,28 @@
 var AuditoryModule = (function () {
 
     function Init() {
-
-        audit();
+        getAuditor();
     }
 
-    function audit() {
+    function getAuditor() {
+        var auditor = new Auditor();
+        var element = $('[name="Auditor"]');
+        var url = element.data("url");
+        var option = "<option value=''>Auditores</option>";
 
-        $('#pending-table').on('click', '.audit-command-button', function () {
-            $("#audit-modal").modal('show');
+        auditor.getAuditor(url).done(function (response) {
+            showColorLoading();
+            $(response.auditors).each(function (key, value) {
+                option += "<option value='" + value.UserCode + "'>" + value.Name + "</option>";
+            });
+
+            element.html(option);
+            hideColorLoading();
         });
     }
 
     return {
         Init: Init,
-        audit: audit
     };
 
 }());
-
-
-function Auditory() {
-
-
-
-}

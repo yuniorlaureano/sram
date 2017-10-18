@@ -35,24 +35,39 @@ namespace BisnessLogic
             return new AuditoriaData().AssignAudit(salesDate, selectedAuditor, userCode);
         }
 
-        public bool ReAssignAudit(List<Entities.ReassignedAudit> reassignedAudit)
+        //public bool ReAssignAudit(List<Entities.ReassignedAudit> reassignedAudit)
+        //{
+        //    bool resultset = false;
+        //    AuditoriaData auditoriaData = new AuditoriaData();
+
+        //    if (reassignedAudit.Count == 0)
+        //    {
+        //        throw new ArgumentNullException("Debe proveer la informacion requerida");
+        //    }
+
+        //    foreach (ReassignedAudit item in reassignedAudit)
+        //    {
+        //        resultset = auditoriaData.ReAssignAudit(item);
+        //    }
+
+        //    auditoriaData.CloseConnnection();
+
+        //    return resultset;
+        //}
+
+        public bool ReAssignAudit(int [] assigmentId, int userAssigned, int userCode)
         {
-            bool resultset = false;
             AuditoriaData auditoriaData = new AuditoriaData();
+            string sentencia = "";
 
-            if (reassignedAudit.Count == 0)
+            foreach (var item in assigmentId)
             {
-                throw new ArgumentNullException("Debe proveer la informacion requerida");
+                sentencia += "select '" + item + "' as assignment_id, '" + userCode + "' as user_code, '" + userAssigned + "' as user_assigned from dual union ";
             }
 
-            foreach (ReassignedAudit item in reassignedAudit)
-            {
-                resultset = auditoriaData.ReAssignAudit(item);
-            }
+            sentencia = sentencia.Substring(0, sentencia.Length - 7);
 
-            auditoriaData.CloseConnnection();
-
-            return resultset;
+            return auditoriaData.ReAssignAudit(sentencia);
         }
 
         public List<PenddingAudit> GetAcctInfoByAssignment(string AssignmentId)
@@ -68,7 +83,7 @@ namespace BisnessLogic
              IsDescargaAdministrativo, IsDescargarReauditoria);
         }
 
-        public List<PenddingAudit> GetDoneAudits(string SubscrId, string Auditor, string SalesDate, string CreationDate, string CallId, string PhoneNo)
+        public List<Auditoria> GetDoneAudits(string SubscrId, string Auditor, string SalesDate, string CreationDate, string CallId, string PhoneNo)
         {
             return new AuditoriaData().GetDoneAudits(SubscrId, Auditor, SalesDate, CreationDate, CallId, PhoneNo);
         }
