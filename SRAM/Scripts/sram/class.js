@@ -44,6 +44,15 @@
             data: data
         });
     };
+
+    this.deleteAudit = function (url, data) {
+       return $.ajax({
+            type: 'POST',
+            application: 'JSON',
+            data: data,
+            url: url
+        });
+    };
 }
 
 function Auditor() {
@@ -55,4 +64,27 @@ function Auditor() {
     this.getPendingResume = function (url) {
         return $.get(url);
     };
+}
+
+function Subscriber() {
+    
+    this.getCredit = function (url, data) {
+
+        $.ajax({
+            type: 'GET',
+            application: 'JSON',
+            url: url,
+            data: data 
+        });    
+    }
+
+    this.getClaim = function (url, data) {
+
+        return $.ajax({
+            type: 'GET',
+            application: 'JSON',
+            url: url,
+            data: data
+        });
+    }
 }

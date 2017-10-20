@@ -93,6 +93,7 @@ namespace SRAM.Controllers
         [HttpGet]
         public ViewResult SearchAuditedAccount()
         {
+            ViewBag.input = new InputSearchAuditory();
             ViewBag.Error = null;
             ViewBag.doneAudit = true;
             return View(new List<Auditoria>());
@@ -117,6 +118,7 @@ namespace SRAM.Controllers
             ViewBag.doneAudit = true;
             if (isEnyEmpty)
             {
+                ViewBag.input = input;
                 ViewBag.Error = "Debe proveer al menos uno de los campos requeridos.";
                 return View(new List<Auditoria>());
             }
@@ -125,8 +127,34 @@ namespace SRAM.Controllers
                 transaccion = new AuditoriaBusiness().GetDoneAudits(input.SubscrId, input.Auditor, input.SalesDate, input.CreationDate, input.CallId, input.PhoneNo);
             }
 
+            ViewBag.input = input;
             ViewBag.Error = null;
             return View(transaccion);
+        }
+
+        /// <summary>
+        /// Permite eliminar una auditoria, solo es realizada por un administrador.
+        /// </summary>
+        /// <param name="AuditId"></param>
+        /// <param name="UserCode"></param>
+        /// <returns></returns>
+        public JsonResult DeleteAudit(int? AuditId)
+        {
+            string role = HttpContext.Session["grp_codigo"].ToString();
+
+            bool resulset = false;
+
+            if (role == "adm")
+            {
+                resulset = new AuditoriaBusiness().DeleteAudit(AuditId, Session["UserCode"].ToString());
+            }
+
+            if (resulset)
+            {
+                return Json(new { OK = "Auditoria eliminada correctamete." }, JsonRequestBehavior.AllowGet);    
+            }
+
+            return Json(new { ERROR = "Error al eliminar la auditoria." }, JsonRequestBehavior.AllowGet);
         }
 	}
 }

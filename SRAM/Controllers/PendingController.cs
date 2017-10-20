@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Entities;
 using BisnessLogic;
+using SRAM.Models;
 
 namespace SRAM.Controllers
 {
@@ -14,10 +15,23 @@ namespace SRAM.Controllers
         /// Muestra una lista con los pendientes a auditar.
         /// </summary>
         /// <returns>ViewResult</returns>
-        public ViewResult Index()
+        public ActionResult Index()
         {
-            List<Auditoria> pendingAudits = new AuditoriaBusiness().GetPendingAudit("", "");
+            ViewBag.input = new InputSearchAuditory();
+            ViewBag.Error = null;
+            ViewBag.doneAudit = false;
+            List<Auditoria> pendingAudits = null;
+            string role = Session["Grp_Codigo"].ToString();
+
+            if (role.Equals("adm"))
+            {
+                pendingAudits = new AuditoriaBusiness().GetPendingAudit("", "");
+                return View(pendingAudits);
+            }
+
+            pendingAudits = new AuditoriaBusiness().GetPendingAudit(Session["UserCode"].ToString(), "");
             return View(pendingAudits);
+            
         }
 
         /// <summary>
@@ -29,6 +43,9 @@ namespace SRAM.Controllers
         [HttpPost]
         public ViewResult GetPendingAud(string userCode, string salesDate)
         {
+            ViewBag.input = new InputSearchAuditory();
+            ViewBag.Error = null;
+            ViewBag.doneAudit = false;
             var auditoriasPendientes = new AuditoriaBusiness().GetPendingAudit(userCode, salesDate);
             return View("Index",auditoriasPendientes);
         }

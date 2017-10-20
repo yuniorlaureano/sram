@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Entities
 {
-    public class SubscriberClaimWithClaims
+    public class Claim
     {
         public string ClaimNumber { get; set; }
         public string Book { get; set; }

@@ -20,47 +20,20 @@
     $('#demo-foo-search').on('input', function (e) {
         e.preventDefault();
         pendingTable.trigger('footable_filter', { filter: $(this).val() });
-    });
-
-    $("#pending-table").on('click', '.show-credit', function () {
-        $('#credit-modal').modal().show('show');
-    });
-
-    $("#pending-table").on('click', '.show-claim', function () {
-        $('#claim-modal').modal('show');
-    });
+    });    
 
     $('.picker').datepicker({ autoclose: true });
 
+
+    SubscriberModule.Init();
+
     AuditoryModule.Init();
+    AuditoryModule.deleteAudit(function () { $("#form-search-done-auditories").submit(); });
 
+    PendingModule.audit(function () { $("#form-search-done-auditories").submit(); });
+
+    
+    SubscriberModule.getClaim();
+    SubscriberModule.getCredit();
+        
 });
-
-var AuditoryModule = (function () {
-
-    function Init() {
-        getAuditor();
-    }
-
-    function getAuditor() {
-        var auditor = new Auditor();
-        var element = $('[name="Auditor"]');
-        var url = element.data("url");
-        var option = "<option value=''>Auditores</option>";
-
-        auditor.getAuditor(url).done(function (response) {
-            showColorLoading();
-            $(response.auditors).each(function (key, value) {
-                option += "<option value='" + value.UserCode + "'>" + value.Name + "</option>";
-            });
-
-            element.html(option);
-            hideColorLoading();
-        });
-    }
-
-    return {
-        Init: Init,
-    };
-
-}());

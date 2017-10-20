@@ -21,21 +21,21 @@
                 <h4 class="panel-title">Buscar auditorias realizadas</h4>
             </div>
             <div class="panel-body">
-                @using (Html.BeginForm())
+                @using (Html.BeginForm("SearchAuditedAccount", "Auditory", FormMethod.Post, new { id="form-search-done-auditories" }))
                 {
                     <div class="form-horizontal">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="demo-hor-inputpass">Auditores</label>
                                 <div class="col-sm-10">
-                                    <select name="Auditor" data-url="@Url.Action("GetAuditors", "Auditor")" class="form-control auditor-adm" style="max-width:100%;"></select>
+                                    <select name="Auditor" data-url="@Url.Action("GetAuditors", "Auditor")" class="form-control auditor-adm" style="max-width:100%;" data-current-val="@ViewBag.input.Auditor"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="demo-hor-inputemail">Fecha RDV</label>
                                 <div class="col-sm-10">
                                     <div id="selectedPiker">
-                                        <input name="SalesDate" type="text" class="form-control picker" style="max-width: 100%;">
+                                        <input name="SalesDate" type="text" class="form-control picker" style="max-width: 100%;" data-current-val="@ViewBag.input.SalesDate">
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 <label class="col-sm-2 control-label" for="demo-hor-inputemail">Fecha Auditoria</label>
                                 <div class="col-sm-10">
                                     <div id="selectedPiker">
-                                        <input name="CreationDate" type="text" class="form-control picker" style="max-width: 100%;">
+                                        <input name="CreationDate" type="text" class="form-control picker" style="max-width: 100%;" data-current-val="@ViewBag.input.CreationDate">
                                     </div>
                                 </div>
                             </div>
@@ -52,19 +52,19 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="demo-hor-inputpass">Subscriber Id</label>
                                 <div class="col-sm-10">
-                                    <input name="SubscrId" type="number" class="form-control" style="max-width: 100%;">
+                                    <input name="SubscrId" type="number" class="form-control" style="max-width: 100%;" data-current-val="@ViewBag.input.SubscrId">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="demo-hor-inputpass">Call Id</label>
                                 <div class="col-sm-10">
-                                    <input name="CallId" type="number" class="form-control" style="max-width: 100%;">
+                                    <input name="CallId" type="number" class="form-control" style="max-width: 100%;" data-current-val="@ViewBag.input.CallId">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="demo-hor-inputpass">Telefono</label>
                                 <div class="col-sm-10">
-                                    <input name="PhoneNo" type="number" class="form-control" style="max-width: 100%;">
+                                    <input name="PhoneNo" type="number" class="form-control" style="max-width: 100%;" data-current-val="@ViewBag.input.PhoneNo">
                                 </div>
                             </div>
                         </div>
@@ -82,10 +82,16 @@
         </div>
     </div>
 
-    @RenderPage("~/Views/Shared/_AuditTable.cshtml")
+    @RenderPage("~/Views/Shared/_SearchAuditTable.cshtml")
 </div>
+
+@RenderPage("~/Views/Shared/_CreditModal.cshtml")
+@RenderPage("~/Views/Shared/_ClaimModal.cshtml")
+@RenderPage("~/Views/Shared/_AuditModal.cshtml")
+@RenderPage("~/Views/Shared/Handlebar/Templates.cshtml")
 
 @section scripts{    
     <script src="~/Scripts/sram/class.js"></script>
+    <script src="~/Scripts/sram/modules.js"></script>
     <script src="~/Scripts/sram/auditory.js"></script>
     }

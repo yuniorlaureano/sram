@@ -16,7 +16,7 @@ namespace SRAM
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Assingment", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Pending", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

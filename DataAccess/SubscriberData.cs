@@ -28,9 +28,9 @@ namespace DataAccess
         /// <param name="CanvCode"></param>
         /// <param name="book"></param>
         /// <returns>List<SubscriberClaimWithCredit></returns>
-        public List<SubscriberClaimWithCredit> GetSubscriberClaimsWithCredit(int SubscrId, int CanvEdition, string CanvCode, string book)
+        public List<Credit> GetCredit(int SubscrId, int CanvEdition, string CanvCode, string book)
         {
-            List<SubscriberClaimWithCredit> subscriberClaimsWithCredit = null;
+            List<Credit> credits = null;
             DataSet resultset = null;
 
             try
@@ -43,10 +43,10 @@ namespace DataAccess
                     new OracleParameter("ref_cursor", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
                 };
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("YBRDS_PROD.get_subscr_with_credit", oracleParameter, CommandType.StoredProcedure, Schema.YBRDS_PROD);
+                resultset = oracleBasicsOperations.ExecuteDataAdapter("sram.get_credit", oracleParameter, CommandType.StoredProcedure, Schema.YBRDS_PROD);
 
-                subscriberClaimsWithCredit = resultset.Tables[0].AsEnumerable().Select(
-                        credit => new SubscriberClaimWithCredit
+                credits = resultset.Tables[0].AsEnumerable().Select(
+                        credit => new Credit
                         {
                             ClaimNumber = credit["No. Reclamo"].ToString(),
                             Book = credit["Libro"].ToString(),
@@ -67,7 +67,7 @@ namespace DataAccess
                 }
             }
 
-            return subscriberClaimsWithCredit;
+            return credits;
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace DataAccess
         /// <param name="CanvCode"></param>
         /// <param name="book"></param>
         /// <returns>List<SubscriberClaimWithClaims></returns>
-        public List<SubscriberClaimWithClaims> GetSubscriberClaimsWithClaims(int SubscrId, int CanvEdition, string CanvCode, string book)
+        public List<Claim> GetClaims(int SubscrId, int CanvEdition, string CanvCode, string book)
         {
-            List<SubscriberClaimWithClaims> subscriberClaimsWithClaims = null;
+            List<Claim> claims = null;
             DataSet resultset = null;
 
             try
@@ -93,10 +93,10 @@ namespace DataAccess
                     new OracleParameter("ref_cursor", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
                 };
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("YBRDS_PROD.get_subscr_with_claims", oracleParameter, CommandType.StoredProcedure, Schema.YBRDS_PROD);
+                resultset = oracleBasicsOperations.ExecuteDataAdapter("sram.get_claims", oracleParameter, CommandType.StoredProcedure, Schema.YBRDS_PROD);
 
-                subscriberClaimsWithClaims = resultset.Tables[0].AsEnumerable().Select(
-                    claim => new SubscriberClaimWithClaims
+                claims = resultset.Tables[0].AsEnumerable().Select(
+                    claim => new Claim
                     {
                         ClaimNumber = claim["No. Reclamo"].ToString(),
                         Book = claim["Libro"].ToString(),
@@ -118,7 +118,7 @@ namespace DataAccess
                 }
             }
 
-            return subscriberClaimsWithClaims;
+            return claims;
         }
 
         /// <summary>

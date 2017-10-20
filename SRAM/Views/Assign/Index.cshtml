@@ -64,9 +64,14 @@
     </div>
 </div>
 
+@RenderPage("~/Views/Shared/_CreditModal.cshtml")
+@RenderPage("~/Views/Shared/_ClaimModal.cshtml")
+@RenderPage("~/Views/Shared/_AuditModal.cshtml")
+@RenderPage("~/Views/Shared/Handlebar/Templates.cshtml")
 
 @section scripts{
     <script src="~/Content/plugins/bootstrap-select/bootstrap-select.min.js"></script>
     <script src="~/Scripts/sram/class.js"></script>
+    <script src="~/Scripts/sram/modules.js"></script>
     <script src="~/Scripts/sram/assign.js"></script>
 }

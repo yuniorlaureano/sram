@@ -3,16 +3,16 @@
         <div class="modal-content">
 
             <!--Modal header-->
-            <div class="modal-header">
+            @*<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
                 <h4 class="modal-title">Cliente con Reclamos</h4>
-            </div>
+            </div>*@
 
 
             <!--Modal body-->
             <div class="modal-body">
-                <table class="table">
-                    <caption class="text-center"><span class="text-dark">Cliente con Reclamos</span></caption>
+                <table class="table" data-url="@Url.Action("GetClaims", "Subscriber")" id="claim-table">
+                    <caption class="text-center"><h3>Cliente con Reclamos</h3></caption>
                     <thead>
                         <tr>
                             <th>No. Reclamo</th>
@@ -22,10 +22,9 @@
                             <th>Canv Code</th>
                         </tr>
                     </thead>
-                    <tbody id="tbdoy-claimswithclaims-' + idSubscriber + '"></tbody>
+                    <tbody></tbody>
                 </table>
             </div>
-
 
             <!--Modal footer-->
             <div class="modal-footer">

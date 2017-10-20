@@ -45,7 +45,7 @@
                         <th data-hide="phone, tablet">Fecha RCP</th>
                         <th data-hide="phone, tablet">Cargo</th>
                         <th data-hide="phone, tablet">Call Id</th>
-                        <th data-sort-ignore="true" style="width:180px;"></th>
+                        <th data-sort-ignore="true"></th>
                         <th data-hide="all">Control Verbal Call Id</th>
                         <th data-hide="all">Book Code</th>
                         <th data-hide="all">Conmentario Ejecutivo</th>
@@ -55,6 +55,12 @@
                         <th data-hide="all">Tipo de Servicio</th>
                         <th data-hide="all">Auditor Asignado</th>
                         <th data-hide="all">Venta</th>
+                        <th data-hide="all">CustSorce</th>
+                        <th data-hide="all">Account Id</th>
+                        <th data-hide="all">Fecha de la auditoría</th>
+                        <th data-hide="all">Resultado de la auditoría</th>
+                        <th data-hide="all">Preguntas inválidas</th>
+                        <th data-hide="all">Comentario del Auditor</th>
                         <th data-hide="all">Previo Call Id</th>
                     </tr>
                 </thead>
@@ -63,7 +69,7 @@
                     {
                         <tr data-subscriber="@item.SubscriberId" data-canv-edition="@item.CanvEdition" data-canv-code="@item.Canvass" data-book-code="@item.BookCodeDetail">
                             <td>
-                                <input type="checkbox" class="checked-assigment" value="@item.AssignmentId"/>
+                                <input type="checkbox" class="checked-assigment" value="@item.AssignmentId" />
                             </td>
                             <td>@item.RazonSocial</td>
                             <td>@item.SubscriberId</td>
@@ -83,9 +89,15 @@
 
                                     @if (@item.HassClaim)
                                     {
-                                    <button type="button" class="btn btn-info show-claim" data-url="@Url.Action("GetClaims", "Subscriber")">Claim</button>
-                                    }                                    
-                                    <button type="button" class="btn btn-default audit-command-button" data-assigment-id="@item.AssignmentId" data-account-id="@item.AccountId" data-url="@Url.Action("GetTransactionInfoByAssignment", "Auditory")">Auditar</button>
+                                        <button type="button" class="btn btn-info show-claim" data-url="@Url.Action("GetClaims", "Subscriber")">Claim</button>
+                                    }
+
+                                        <button type="button" class="btn btn-default audit-command-button" data-assigment-id="@item.AssignmentId" data-account-id="@item.AccountId" data-url="@Url.Action("GetTransactionInfoByAssignment", "Auditory")">Re-Auditar</button>
+                                    @if (Session["Grp_Codigo"].ToString().Equals("adm"))
+                                    {
+                                        <button class="btn btn-danger fa fa-trash btn-delete-audit" data-audit-id="@item.AuditId" data-url="@Url.Action("DeleteAudit", "Auditory")" />
+                                    }
+
                                 </div>
                             </td>
                             <td>@item.ControlVerballCallId</td>
@@ -97,7 +109,13 @@
                             <td>@item.TipoDeServicio</td>
                             <td>@item.AuditorAsignado</td>
                             <td>@item.Venta</td>
-                            <td>@(item.PrevioCallId == "X" ? "N/A": item.PrevioCallId)</td>
+                            <td>@item.CustSource</td>
+                            <td>@item.AccountId</td>
+                            <td>@item.AuditCreationDate</td>
+                            <td>@item.AuditResult</td>
+                            <td>@item.InvalidQuestions</td>
+                            <td>@item.ComentarioAuditor</td>
+                            <td>@(item.PrevioCallId == "X" ? "N/A" : item.PrevioCallId)</td>
                         </tr>
                     }
                 </tbody>

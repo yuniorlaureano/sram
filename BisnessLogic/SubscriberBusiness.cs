@@ -10,14 +10,14 @@ namespace BisnessLogic
 {
     public class SubscriberBusiness
     {
-        public List<SubscriberClaimWithCredit> GetSubscriberClaimsWithCredit(int SubscrId, int CanvEdition, string CanvCode, string book)
+        public List<Credit> GetCredit(int SubscrId, int CanvEdition, string CanvCode, string book)
         {
-            return new SubscriberData().GetSubscriberClaimsWithCredit(SubscrId, CanvEdition, CanvCode, book);
+            return new SubscriberData().GetCredit(SubscrId, CanvEdition, CanvCode, book);
         }
 
-        public List<SubscriberClaimWithClaims> GetSubscriberClaimsWithClaims(int SubscrId, int CanvEdition, string CanvCode, string book)
+        public List<Claim> GetClaims(int SubscrId, int CanvEdition, string CanvCode, string book)
         {
-            return new SubscriberData().GetSubscriberClaimsWithClaims(SubscrId, CanvEdition, CanvCode, book);
+            return new SubscriberData().GetClaims(SubscrId, CanvEdition, CanvCode, book);
         }
 
         public List<SubscriberCanvBook> GetSubscribersCanvBooks(int SubscrId, string CanvCode, int CanvEdition)

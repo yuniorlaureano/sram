@@ -4,16 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
-    <script>
-        window.userCredentials = {
-            Name: '@Session["UserName"]',
-            Group: '@Session["Grp_Codigo"]',
-            Level:'@Session["usr_nivel"]',
-            Code: '@Session["UserCode"]'
-        };
-        window.domain = window.location.origin + '/SRAM';
-            
-    </script>
     <!--STYLESHEET-->
     <!--=================================================-->
     <!--Open Sans Font [ OPTIONAL ] -->
@@ -27,15 +17,14 @@
     <!--Nifty Stylesheet [ REQUIRED ]-->
     <link href="~/Content/nifty.min.css" rel="stylesheet">
 
-
+    <link href="~/Content/themes/type-c/theme-light.min.css" rel="stylesheet" />
     <!--Themify Icons [ OPTIONAL ]-->
     <link href="~/Content/themify-icons/themify-icons.min.css" rel="stylesheet">
 
     <!--Font Awesome [ OPTIONAL ]-->
     <link href="~/Content/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     
-    <link href="~/Content/plugins/fooTable/css/footable.core.css" rel="stylesheet" />
-
+    <link href="~/Content/plugins/fooTable/css/footable.core.min.css" rel="stylesheet" />
 
     <link href="~/Content/loading.css" rel="stylesheet" />
 
@@ -46,7 +35,7 @@
 
 </head>
 <body>
-    <div id="container" class="mainnav-sm jumping mainnav-fixed navbar-fixed">
+    <div id="container" class="mainnav-lg jumping mainnav-fixed navbar-fixed">
 
         <!--NAVBAR-->
         <!--===================================================-->
@@ -162,25 +151,30 @@
                             <div class="nano-content">
                                 <ul id="mainnav-menu" class="list-group">
                                     <li>
-                                        <a href="#" id="nav-pendientes-auditar-link">
+                                        <a href="@Url.Action("Index", "Pending")" class="can-show-loading">
                                             <i class="fa fa-headphones" aria-hidden="true"></i>
                                             <span class="menu-title">
                                                 <strong>Pendientes de Auditar</strong>
                                             </span>
-                                        </a>
+                                        </a>                                        
                                     </li>
 
-                                    <li>
-                                        <a href="#" id="nav-asignar-link">
-                                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                                            <span class="menu-title">
-                                                <strong>Asignar</strong>
-                                            </span>
-                                        </a>
-                                    </li>
+                                    
+                                       @if (Session["Grp_Codigo"].ToString().Equals("adm"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Assign")" class="can-show-loading">
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    <span class="menu-title">
+                                                        <strong>Asignar</strong>
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        }                                            
+                                    
 
                                     <li>
-                                        <a href="#" id="nav-buscar-auditoria-link">
+                                        <a href="@Url.Action("SearchAuditedAccount", "Auditory")" class="can-show-loading">
                                             <i class="fa fa-search" aria-hidden="true"></i>
                                             <span class="menu-title">
                                                 <strong>Buscar Auditorias</strong>
@@ -188,14 +182,14 @@
                                         </a>
                                     </li>
 
-                                    <li>
+                                    @*<li>
                                         <a href="#" id="nav-asignar-reportes-link">
                                             <i class="fa fa-file-text" aria-hidden="true"></i>
                                             <span class="menu-title">
                                                 <strong>Reportes</strong>
                                             </span>
                                         </a>
-                                    </li>
+                                    </li>*@
 
 
 
@@ -279,9 +273,9 @@
 
     <script src="~/Content/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 
-    <script src="~/Content/plugins/fooTable/js/footable.js"></script>
+    @*<script src="~/Content/plugins/fooTable/js/footable.js"></script>
     
-    <script src="~/Scripts/js/tables-footable.js"></script>
+    <script src="~/Scripts/js/tables-footable.js"></script*@>
 
     <script src="~/Content/plugins/fooTable/dist/footable.all.min.js"></script>
 
@@ -295,6 +289,11 @@
     
     @RenderSection("scripts", required: false)
     
+    <script>
+        $(".can-show-loading").on("click", function () {
+            showColorLoading();
+        });
+    </script>
 </body>
 </html>
 

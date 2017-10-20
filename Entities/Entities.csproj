@@ -53,8 +53,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReassignedAudit.cs" />
     <Compile Include="SubscriberCanvBook.cs" />
-    <Compile Include="SubscriberClaimWithClaims.cs" />
-    <Compile Include="SubscriberClaimWithCredit.cs" />
+    <Compile Include="Claim.cs" />
+    <Compile Include="Credit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

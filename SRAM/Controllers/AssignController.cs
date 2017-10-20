@@ -27,11 +27,16 @@ namespace SRAM.Controllers
         /// <param name="auditor">Usuarios a quienes le seran asignadas las cuentas</param>
         /// <returns>ViewResult</returns>
         [HttpPost]
-        public ViewResult AssignAudit(string date, string auditor)
+        public ActionResult AssignAudit(string date, string auditor)
         {
-            ViewBag.totalAsignado = new AuditoriaBusiness().AssignAudit(date, auditor, Session["UserCode"].ToString()); ;
-            List<Entities.UnAssignedAudit> unAssignedAudits = new AuditoriaBusiness().GetUnAssignedAudit();
-            return View("Index", unAssignedAudits);
+            if (Session["Grp_Codigo"].ToString().Equals("adm"))
+            {
+                ViewBag.totalAsignado = new AuditoriaBusiness().AssignAudit(date, auditor, Session["UserCode"].ToString()); ;
+                List<Entities.UnAssignedAudit> unAssignedAudits = new AuditoriaBusiness().GetUnAssignedAudit();
+                return View("Index", unAssignedAudits);        
+            }
+
+            return RedirectToAction("Index");
         }
 	}
 }

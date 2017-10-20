@@ -7,11 +7,25 @@
     {{/each}}
 </script>
 
-<script type="text/html" id="pending-assignment-summary">
-    {{#each summary}}
+<script type="text/html" id="subscriber-credit">
+    {{#each credit}}
     <tr>
-        <td>{{SalesDate}}</td>
-        <td class="td-count-summary">{{Cantidad}}</td>
+        <th>{{ClaimNumber}}</th>
+        <th>{{Book}}</th>
+        <th>{{ClientComment}}</th>
+        <th>{{InfoDescription}}</th>
+    </tr>
+    {{/each}}
+</script>
+
+<script type="text/html" id="subscriber-claim">
+    {{#each claim}}
+    <tr>
+        <th>{{ClaimNumber}}</th>
+        <th>{{Book}}</th>
+        <th>{{ClaimDescription}}</th>
+        <th>{{ClientComment}}</th>
+        <th>{{CanvCode}}</th>
     </tr>
     {{/each}}
 </script>

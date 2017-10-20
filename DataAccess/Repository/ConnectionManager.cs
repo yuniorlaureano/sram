@@ -31,22 +31,22 @@ namespace DataAccess.Repository
 
                 case Schema.SFA:
                     {
-                        OracleConnection = ConfigurationManager.ConnectionStrings["SFA"].ToString();
+                        OracleConnection = ConfigurationManager.ConnectionStrings["SFA_ConnectionString"].ToString();
                         break;
                     }
                 case Schema.BRDS_PROD:
                     {
-                        OracleConnection = ConfigurationManager.ConnectionStrings["BRDS_PROD"].ToString();
+                        OracleConnection = ConfigurationManager.ConnectionStrings["BRDS_PROD_ConnectionString"].ToString();
                         break;
                     }
                 case Schema.YBRDS_PROD:
                     {
-                        OracleConnection = ConfigurationManager.ConnectionStrings["YBRDS_PROD"].ToString();
+                        OracleConnection = ConfigurationManager.ConnectionStrings["YBRDS_PROD_ConnectionString"].ToString();
                         break;
                     }
                 case Schema.GESTION:
                     {
-                        OracleConnection = ConfigurationManager.ConnectionStrings["GESTION"].ToString();
+                        OracleConnection = ConfigurationManager.ConnectionStrings["GESTION_ConnectionString"].ToString();
                         break;
                     }
             }

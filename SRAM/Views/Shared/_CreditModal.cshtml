@@ -3,16 +3,16 @@
         <div class="modal-content">
 
             <!--Modal header-->
-            <div class="modal-header">
+            @*<div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
                 <h4 class="modal-title">Informacion de Reclamos</h4>
-            </div>
+            </div>*@
 
 
             <!--Modal body-->
             <div class="modal-body">
-                <table class="table">
-                    <caption class="text-dark text-center"><span class="text-dark">Informacion de Reclamos</span></caption>
+                <table class="table" data-ur="@Url.Action("GetCredits","Subscriber")" id="credit-table">
+                    <caption class="text-dark text-center"><h3>Informacion de Reclamos</h3></caption>
                     <thead>
                         <tr>
                             <th>No. Reclamo</th>
@@ -21,10 +21,9 @@
                             <th>Info Desc</th>
                         </tr>
                     </thead>
-                    <tbody id="tbdoy-claims-' + idSubscriber + '"></tbody>
+                    <tbody></tbody>
                 </table>
             </div>
-
 
             <!--Modal footer-->
             <div class="modal-footer">

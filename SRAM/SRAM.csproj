@@ -166,12 +166,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AssignController.cs" />
     <Compile Include="Controllers\AssingmentController.cs" />
     <Compile Include="Controllers\AuditorController.cs" />
     <Compile Include="Controllers\AuditoryController.cs" />
     <Compile Include="Controllers\PendingController.cs" />
+    <Compile Include="Controllers\SubscriberController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1642,6 +1642,7 @@
     <Content Include="Scripts\sram\assingment.js" />
     <Content Include="Scripts\sram\auditory.js" />
     <Content Include="Scripts\sram\class.js" />
+    <Content Include="Scripts\sram\modules.js" />
     <Content Include="Scripts\sram\pending.js" />
     <Content Include="Scripts\Utils.js" />
     <Content Include="Scripts\_references.js" />
@@ -1654,6 +1655,7 @@
     </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1662,17 +1664,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Assingment\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
-    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_AuditTable.cshtml" />
     <Content Include="Views\Pending\Index.cshtml" />
@@ -1681,6 +1673,7 @@
     <Content Include="Views\Shared\_CreditModal.cshtml" />
     <Content Include="Views\Shared\_AuditModal.cshtml" />
     <Content Include="Views\Shared\Handlebar\Templates.cshtml" />
+    <Content Include="Views\Shared\_SearchAuditTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1689,6 +1682,7 @@
     <Folder Include="Content\Report\" />
     <Folder Include="css\BDM\" />
     <Folder Include="Views\Auditor\" />
+    <Folder Include="Views\Subscriber\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

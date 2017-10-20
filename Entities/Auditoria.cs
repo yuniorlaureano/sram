@@ -14,7 +14,7 @@ namespace Entities
         public string Telefono { get; set; }
         public string Canvass { get; set; }
         public string CanvEdition { get; set; }
-        public string BookCode { get; set; }
+        public string BookCodeDetail { get; set; }
         public string Venta { get; set; }
         public string Ejecutivo { get; set; }
         public string Unidad { get; set; }

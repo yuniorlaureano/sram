@@ -66,14 +66,14 @@ namespace SRAM.Controllers
 
         public JsonResult GetSubscrClaimWithCredit(int SubscrId, int CanvEdition, string CanvCode, string book)
         {
-            List<Entities.SubscriberClaimWithCredit> subscriberWithCredit = new SubscriberBusiness().GetSubscriberClaimsWithCredit(SubscrId, CanvEdition, CanvCode, book);
+            List<Entities.Credit> subscriberWithCredit = new SubscriberBusiness().GetCredit(SubscrId, CanvEdition, CanvCode, book);
 
             return Json(new { credit = subscriberWithCredit }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetSubscrClaimWithClaims(int SubscrId, int CanvEdition, string CanvCode, string book)
         {
-            List<Entities.SubscriberClaimWithClaims> subscriberClaimsWithClaims = new SubscriberBusiness().GetSubscriberClaimsWithClaims(SubscrId, CanvEdition, CanvCode, book);
+            List<Entities.Claim> subscriberClaimsWithClaims = new SubscriberBusiness().GetClaims(SubscrId, CanvEdition, CanvCode, book);
 
             return Json(new { claim = subscriberClaimsWithClaims }, JsonRequestBehavior.AllowGet);
         }
