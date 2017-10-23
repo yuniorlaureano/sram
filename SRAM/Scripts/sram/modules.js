@@ -17,6 +17,10 @@
 
     function audit(onSucess) {
 
+        $("#audit-modal").on("hidden.bs.modal", function () {
+            cleanAuditComponent();
+        });
+
         $('#pending-table').on('click', '.audit-command-button', function () {
 
             self.assigmentId = $(this).attr("data-assigment-id");
@@ -30,13 +34,21 @@
 
             var comment = $('#comment-audit').val();
             var answer = [
-                    $('#pregunta1').is(":checked") ? 1 : 0, $('#pregunta2').is(":checked") ? 1 : 0,
-                    $('#pregunta3').is(":checked") ? 1 : 0, $('#pregunta4').is(":checked") ? 1 : 0,
-                    $('#pregunta5').is(":checked") ? 1 : 0, $('#pregunta6').is(":checked") ? 1 : 0,
-                    $('#pregunta7').is(":checked") ? 1 : 0, $('#pregunta8').is(":checked") ? 1 : 0,
-                    $('#pregunta9').is(":checked") ? 1 : 0, $('#pregunta10').is(":checked") ? 1 : 0,
-                    $('#pregunta11').is(":checked") ? 1 : 0, $('#pregunta12').is(":checked") ? 1 : 0
+                    $($("div#pregunta1 input[type='radio']:checked")[0]).val(), $($("div#pregunta2 input[type='radio']:checked")[0]).val(),
+                    $($("div#pregunta3 input[type='radio']:checked")[0]).val(), $($("div#pregunta4 input[type='radio']:checked")[0]).val(),
+                    $($("div#pregunta5 input[type='radio']:checked")[0]).val(), $($("div#pregunta6 input[type='radio']:checked")[0]).val(),
+                    $($("div#pregunta7 input[type='radio']:checked")[0]).val(), $($("div#pregunta8 input[type='radio']:checked")[0]).val(),
+                    $($("div#pregunta9 input[type='radio']:checked")[0]).val(), $($("div#pregunta10 input[type='radio']:checked")[0]).val(),
+                    $($("div#pregunta11 input[type='radio']:checked")[0]).val(), $($("div#pregunta12 input[type='radio']:checked")[0]).val()
             ];
+
+            for (var i = 0; i < answer.length; i++) {
+                if (answer[i] == undefined)
+                {
+                    alertNoty("Debeseleccionar los datos vitales.", "Error", "danger");
+                    return false;
+                }
+            }
 
             var descargoReAuditoría = $('#descargo-re-auditoría').is(":checked") ? 1 : 0;
             var descargoaAdministrativo = $('#descargo-administrativo').is(":checked") ? 1 : 0;
@@ -47,16 +59,18 @@
                 AssignmentId: self.assigmentId, AccountId: self.accoutId, AuditorComments: comment, Answers: answer,
                 IsDescargaAdministrativo: descargoaAdministrativo, IsDescargarReauditoria: descargoReAuditoría
             };
-
+            
             var auditory = new Auditory();
             auditory.audit($(this).data("url"), data).done(function (response) {
                 if (response.OK) {
                     alertNoty(response.OK, "informacion", "success");
+                    cleanAuditComponent();
                     onSucess();
                 }
 
                 if (response.ERROR) {
                     alertNoty(response.ERROR, "Error", "danger");
+                    cleanAuditComponent();
                 }
 
                 $('input:checked').prop("checked", false);
@@ -191,6 +205,13 @@
         $(document).on("click", "#refrescar-pendiente-auditar", function () {
             window.location = pendingUrl;
         });
+    }
+
+    function cleanAuditComponent() {
+        $($("#audit-modal input[type='radio']:checked")).prop("checked", false);
+        $("#comment-audit").val("");
+        $('#descargo-re-auditoría').prop("checked", false);
+        $('#descargo-administrativo').prop("checked", false);
     }
 
     return {
