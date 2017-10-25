@@ -21,8 +21,15 @@
                                     <option value="15">15</option>
                                     <option value="20">20</option>
                                 </select>
-                                entries
                             </label>
+                            <div class="form-group">
+                                <label class="control-label">Status</label>
+                                <select id="audit-foo-filter-status" class="form-control">
+                                    <option value="">Todas</option>
+                                    <option value="Auditada">Auditada</option>
+                                    <option value="Revisada">Revisada</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-6 text-xs-center text-right">
@@ -32,103 +39,123 @@
                     </div>
                 </div>
             </div>
-            <table id="pending-table" class="table toggle-circle" data-page-size="10">
-                <thead>
-                    <tr>
-                        <th data-sort-ignore="true"></th>
-                        <th data-toggle="true" class="footable-first-column">Razón Social</th>
-                        <th>SubscriberId</th>
-                        <th>Teléfono</th>
-                        <th>Canvass</th>                        
-                        <th>Ejecutivo</th>
-                        <th data-hide="phone, tablet">Unidad</th>
-                        <th data-hide="phone, tablet">Fecha RCP</th>
-                        <th data-hide="phone, tablet">Cargo</th>
-                        <th data-hide="phone, tablet">Call Id</th>
-                        <th data-sort-ignore="true"></th>
-                        <th data-hide="all">Control Verbal Call Id</th>
-                        <th data-hide="all">Book Code</th>
-                        <th data-hide="all">Conmentario Ejecutivo</th>
-                        <th data-hide="all">PDC Dimmas</th>
-                        <th data-hide="all">PDC Codetel</th>
-                        <th data-hide="all">Compañía</th>
-                        <th data-hide="all">Tipo de Servicio</th>
-                        <th data-hide="all">Auditor Asignado</th>
-                        <th data-hide="all">Venta</th>
-                        <th data-hide="all">CustSorce</th>
-                        <th data-hide="all">Account Id</th>
-                        <th data-hide="all">Fecha de la auditoría</th>
-                        <th data-hide="all">Resultado de la auditoría</th>
-                        <th data-hide="all">Preguntas inválidas</th>
-                        <th data-hide="all">Comentario del Auditor</th>
-                        <th data-hide="all">Previo Call Id</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr data-subscriber="@item.SubscriberId" data-canv-edition="@item.CanvEdition" data-canv-code="@item.Canvass" data-book-code="@item.BookCodeDetail">
-                            <td>
-                                <input type="checkbox" class="checked-assigment" value="@item.AssignmentId" />
-                            </td>
-                            <td>@item.RazonSocial</td>
-                            <td>@item.SubscriberId</td>
-                            <td>@item.Telefono</td>
-                            <td>@item.Canvass</td>                            
-                            <td>@item.Ejecutivo</td>
-                            <td>@item.Unidad</td>
-                            <td>@item.FechaRPC</td>
-                            <td>@item.Cargo</td>
-                            <td>@item.CallId</td>
-                            <td>
-                                <div class="btn-group-xs">
-                                    @if (@item.HassCredit)
-                                    {
-                                        <button type="button" class="btn btn-primary show-credit" data-url="@Url.Action("GetCredits", "Subscriber")">Credit</button>
-                                    }
+            <div class="table-responsive">
+                <table id="pending-table" class="table toggle-circle" data-page-size="10">
+                    <thead>
+                        <tr>
+                            <th data-sort-ignore="true"></th>
+                            <th data-toggle="true" class="footable-first-column">Razón Social</th>
+                            <th>SubscriberId</th>
+                            <th>Teléfono</th>
+                            <th>Canvass</th>
+                            <th>Ejecutivo</th>
+                            <th data-hide="phone, tablet">Unidad</th>
+                            <th data-hide="phone, tablet">Fecha RCP</th>
+                            <th data-hide="phone, tablet">Cargo</th>
+                            <th data-hide="phone, tablet">Call Id</th>
+                            <th data-sort-ignore="true"></th>
+                            <th data-hide="all">Status</th>
+                            <th data-hide="all">Control Verbal Call Id</th>
+                            <th data-hide="all">Book Code</th>
+                            <th data-hide="all">Conmentario Ejecutivo</th>
+                            <th data-hide="all">PDC Dimmas</th>
+                            <th data-hide="all">PDC Codetel</th>
+                            <th data-hide="all">Compañía</th>
+                            <th data-hide="all">Tipo de Servicio</th>
+                            <th data-hide="all">Auditor Asignado</th>
+                            <th data-hide="all">Venta</th>
+                            <th data-hide="all">CustSorce</th>
+                            <th data-hide="all">Account Id</th>
+                            <th data-hide="all">Fecha de la auditoría</th>
+                            <th data-hide="all">Resultado de la auditoría</th>
+                            <th data-hide="all">Preguntas inválidas</th>
+                            <th data-hide="all">Comentario del Auditor</th>
+                            <th data-hide="all">Previo Call Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-subscriber="@item.SubscriberId" data-canv-edition="@item.CanvEdition" data-canv-code="@item.Canvass" data-book-code="@item.BookCodeDetail">
+                                <td>
+                                    <input type="checkbox" class="checked-assigment" value="@item.AssignmentId" />
+                                </td>
+                                <td>@item.RazonSocial</td>
+                                <td>@item.SubscriberId</td>
+                                <td>@item.Telefono</td>
+                                <td>@item.Canvass</td>
+                                <td>@item.Ejecutivo</td>
+                                <td>@item.Unidad</td>
+                                <td>@item.FechaRPC</td>
+                                <td>@item.Cargo</td>
+                                <td>@item.CallId</td>
+                                <td>
+                                    <div class="btn-group-xs">
+                                        @if (@item.HassCredit)
+                                        {
+                                            <button type="button" class="btn btn-primary show-credit" data-url="@Url.Action("GetCredits", "Subscriber")">Credit</button>
+                                        }
 
-                                    @if (@item.HassClaim)
-                                    {
-                                        <button type="button" class="btn btn-info show-claim" data-url="@Url.Action("GetClaims", "Subscriber")">Claim</button>
-                                    }
+                                        @if (@item.HassClaim)
+                                        {
+                                            <button type="button" class="btn btn-info show-claim" data-url="@Url.Action("GetClaims", "Subscriber")">Claim</button>
+                                        }
 
                                         <button type="button" class="btn btn-default audit-command-button" data-assigment-id="@item.AssignmentId" data-account-id="@item.AccountId" data-url="@Url.Action("GetTransactionInfoByAssignment", "Auditory")">Re-Auditar</button>
-                                    @if (Session["Grp_Codigo"].ToString().Equals("adm"))
-                                    {
-                                        <button class="btn btn-danger fa fa-trash btn-delete-audit" data-audit-id="@item.AuditId" data-url="@Url.Action("DeleteAudit", "Auditory")" />
-                                    }
+                                        @if (Session["Grp_Codigo"].ToString().Equals("adm"))
+                                        {
+                                            <button class="btn btn-danger fa fa-trash btn-delete-audit" data-audit-id="@item.AuditId" data-url="@Url.Action("DeleteAudit", "Auditory")" />
+                                        }
 
+                                    </div>
+                                </td>
+
+                                @if (@item.Status == "Auditada")
+                                {
+                                    <td><span class="label label-table label-success">@item.Status</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="label label-table label-primary">@item.Status</span></td>
+                                }
+
+                                <td>@item.ControlVerballCallId</td>
+                                <td>@item.BookCodeDetail</td>
+                                <td>@item.ComentarioEjecutivo</td>
+                                <td>@item.PDCDimmas</td>
+                                <td>@item.PDCCodetel</td>
+                                <td>@item.Compania</td>
+                                <td>@item.TipoDeServicio</td>
+                                <td>@item.AuditorAsignado</td>
+                                <td>@item.Venta</td>
+                                <td>@item.CustSource</td>
+                                <td>@item.AccountId</td>
+                                <td>@item.AuditCreationDate</td>
+                                <td>@item.AuditResult</td>
+                                <td>@item.InvalidQuestions</td>
+                                <td>@item.ComentarioAuditor</td>
+                                @if (item.PrevioCallId != "X")
+                                {
+                                    <td><span class="label label-table label-danger">@item.PrevioCallId</span></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <div class="text-left">
+                                    <ul class="pagination"></ul>
                                 </div>
                             </td>
-                            <td>@item.ControlVerballCallId</td>
-                            <td>@item.BookCodeDetail</td>
-                            <td>@item.ComentarioEjecutivo</td>
-                            <td>@item.PDCDimmas</td>
-                            <td>@item.PDCCodetel</td>
-                            <td>@item.Compania</td>
-                            <td>@item.TipoDeServicio</td>
-                            <td>@item.AuditorAsignado</td>
-                            <td>@item.Venta</td>
-                            <td>@item.CustSource</td>
-                            <td>@item.AccountId</td>
-                            <td>@item.AuditCreationDate</td>
-                            <td>@item.AuditResult</td>
-                            <td>@item.InvalidQuestions</td>
-                            <td>@item.ComentarioAuditor</td>
-                            <td>@(item.PrevioCallId == "X" ? "N/A" : item.PrevioCallId)</td>
                         </tr>
-                    }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="5">
-                            <div class="text-right">
-                                <ul class="pagination"></ul>
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+                    </tfoot>
+                </table>
+            </div>
         </div>
     </div>
 </div>

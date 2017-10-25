@@ -37,9 +37,9 @@ namespace DataAccess
             {              
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
                     new OracleParameter("v_subscr_id",OracleDbType.Int32){ Value = SubscrId },
-                    new OracleParameter("v_canv_edition",OracleDbType.Int32) { Value = CanvEdition },
-                    new OracleParameter("v_canv_code", OracleDbType.Varchar2) { Value = CanvCode },
+                    new OracleParameter("v_canv_edition",OracleDbType.Int32) { Value = CanvEdition },                    
                     new OracleParameter("v_book_code", OracleDbType.Varchar2) { Value = book },
+                    new OracleParameter("v_canv_code", OracleDbType.Varchar2) { Value = CanvCode },
                     new OracleParameter("ref_cursor", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
                 };
 
@@ -50,7 +50,7 @@ namespace DataAccess
                         {
                             ClaimNumber = credit["No. Reclamo"].ToString(),
                             Book = credit["Libro"].ToString(),
-                            ClientComment = credit["Comentario Cliente"].ToString(),
+                            ClientComment = credit["Comentario de Cliente"].ToString(),
                             InfoDescription = credit["Info Desc"].ToString()
                         }).ToList();
 

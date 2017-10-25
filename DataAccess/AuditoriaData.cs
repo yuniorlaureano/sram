@@ -51,7 +51,7 @@ using System.Globalization;namespace DataAccess
                     
                     pendiente => new Auditoria
                     {
-                        Status = pendiente["status"].ToString(),
+                        //Status = pendiente["status"].ToString(),
                         AssignmentId = pendiente["AssignmentId"].ToString(),
                         RazonSocial = pendiente["SubscrName"].ToString(),
                         SubscriberId = pendiente["SubscrId"].ToString(),

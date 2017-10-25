@@ -1,14 +1,6 @@
 ﻿<div class="modal" id="credit-modal" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
-            <!--Modal header-->
-            @*<div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-                <h4 class="modal-title">Informacion de Reclamos</h4>
-            </div>*@
-
-
             <!--Modal body-->
             <div class="modal-body">
                 <table class="table" data-ur="@Url.Action("GetCredits","Subscriber")" id="credit-table">
@@ -24,7 +16,6 @@
                     <tbody></tbody>
                 </table>
             </div>
-
             <!--Modal footer-->
             <div class="modal-footer">
                 <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>

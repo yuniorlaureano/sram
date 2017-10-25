@@ -397,8 +397,8 @@ var SubscriberModule = (function () {
             var data = {
                 SubscrId: tr.attr("data-subscriber"),
                 CanvEdition: tr.attr("data-canv-edition"),
-                CanvCode: tr.attr("data-canv-code"),
-                Book: tr.attr("data-book-code")
+                CanvCode: tr.attr("data-canv-code").trim(),
+                Book: tr.attr("data-book-code").trim()
             };
             
             subscriber.getClaim($(this).attr("data-url"), data).done(function (response) {
@@ -420,8 +420,8 @@ var SubscriberModule = (function () {
             var data = {
                 SubscrId: tr.attr("data-subscriber"),
                 CanvEdition: tr.attr("data-canv-edition"),
-                CanvCode: tr.attr("data-canv-code"),
-                Book: processBooks(tr.attr("data-book-code"))
+                CanvCode: tr.attr("data-canv-code").trim(),
+                Book: processBooks(tr.attr("data-book-code").trim())
             };
             
             subscriber.getClaim($(this).attr("data-url"), data).done(function (response) {

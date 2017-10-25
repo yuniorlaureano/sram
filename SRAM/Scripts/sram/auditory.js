@@ -22,6 +22,11 @@
         pendingTable.trigger('footable_filter', { filter: $(this).val() });
     });    
 
+    $('#audit-foo-filter-status').change(function (e) {
+        e.preventDefault();
+        pendingTable.trigger('footable_filter', { filter: $(this).val() });
+    });
+
     $('.picker').datepicker({ autoclose: true });
 
 
