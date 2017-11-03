@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Reportes</h3>
+            </div>
+
+            <!--Block Styled Form -->
+            <!--===================================================-->
+            <form>
+                <div class="panel-body">                    
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="input-group date">
+                                    <input type="text" class="form-control picker">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="input-group date">
+                                    <input type="text" class="form-control picker">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <button class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </form>
+            <!--===================================================-->
+            <!--End Block Styled Form -->
+
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="panel media pad-all bg-info">
+                            <div class="media-left">
+                                <span class="icon-wra icon-wap-sm bg-ifo">
+                                    <a href="#"><i class="fa fa-file-excel-o fa-3x"></i></a>
+                                </span>
+                            </div>
+                            <div class="media-body">
+                                <p class="mar-no text-semibold">Resumen Por Unidad</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="panel media pad-all bg-info">
+                            <div class="media-left">
+                                <span class="icon-wra icon-wap-sm bg-ifo">
+                                    <a href="#"><i class="fa fa-file-excel-o fa-3x"></i></a>
+                                </span>
+                            </div>
+                            <div class="media-body">
+                                <p class="mar-no text-semibold">Por Dato Vital</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="panel media pad-all bg-info">
+                            <div class="media-left">
+                                <span class="icon-wra icon-wap-sm bg-ifo">
+                                    <a href="#"><i class="fa fa-file-excel-o fa-3x"></i></a>
+                                </span>
+                            </div>
+                            <div class="media-body">
+                                <p class="mar-no text-semibold">Por Auditoría</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="panel media pad-all bg-info">
+                            <div class="media-left">
+                                <span class="icon-wra icon-wap-sm bg-ifo">
+                                    <a href="#"><i class="fa fa-file-excel-o fa-3x"></i></a>
+                                </span>
+                            </div>
+                            <div class="media-body">
+                                <p class="mar-no text-semibold">Por Asesor</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            $('.picker').datepicker({ autoclose: true });
+        });
+    </script>
+    }

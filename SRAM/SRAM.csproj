@@ -171,6 +171,7 @@
     <Compile Include="Controllers\AuditorController.cs" />
     <Compile Include="Controllers\AuditoryController.cs" />
     <Compile Include="Controllers\PendingController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SubscriberController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1646,9 +1647,9 @@
     <Content Include="Scripts\sram\pending.js" />
     <Content Include="Scripts\Utils.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Assign\View1.cshtml" />
     <Content Include="Views\Assign\Index.cshtml" />
     <Content Include="Views\Auditory\SearchAuditedAccount.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
     <None Include="Views\Shared\Handlebar\PendingSummary.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

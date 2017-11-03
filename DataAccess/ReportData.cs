@@ -26,7 +26,7 @@ namespace DataAccess
             oracleBasicsOperations = new OracleBasicsOperations();
         }
 
-        public List<ResumenPorUnidad> GetReporteResumenPorUnidad(string DateFrom, string DateTo)
+        public List<ResumenPorUnidad> GetReportByUnit(string dateFrom, string dateTo)
         {
             List<ResumenPorUnidad> resumentPorUnidad = null;
             DataTable resultset = null;
@@ -40,8 +40,8 @@ namespace DataAccess
             {
 
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(DateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(DateTo, new CultureInfo("en-US")) },
+                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
+                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo, new CultureInfo("en-US")) },
                     new OracleParameter("ResultSet", OracleDbType.RefCursor) {Direction = ParameterDirection.Output},
                 };
 
@@ -107,13 +107,7 @@ namespace DataAccess
                     }
                     resumentPorUnidad[i].Porcentaje = -1;
                     
-                }
-                                
-                //string path = HttpContext.Current.Server.MapPath("~/Content/Report/");
-
-                //var reporte = Excel.CreateExcelFileWithDataTable(resultset, HttpContext.Current.Session["UserCode"] + "_reporte Por Unidad", path, "xlsx", true);
-                //HttpContext.Current.Session["reportePorUnidadPath"] = path + reporte;
-                   
+                }                   
             }
             catch (OracleException excep)
             {
@@ -130,7 +124,7 @@ namespace DataAccess
             return resumentPorUnidad;
         }
 
-        public List<ResumenPorAsesor> GetReportePorAsesor(string DateFrom, string DateTo)
+        public List<ResumenPorAsesor> GetReportByAsesor(string dateFrom, string dateTo)
         {
             List<ResumenPorAsesor> reportePorAsesor = null;
             DataTable resultset = null;
@@ -142,8 +136,8 @@ namespace DataAccess
             {
 
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(DateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(DateTo , new CultureInfo("en-US")) },
+                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
+                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo , new CultureInfo("en-US")) },
                     new OracleParameter("ResultSet", OracleDbType.RefCursor) {Direction = ParameterDirection.Output},
                 };
 
@@ -172,12 +166,6 @@ namespace DataAccess
 
                 }
 
-
-
-                //string path = HttpContext.Current.Server.MapPath("~/Content/Report/");
-
-                //var reporte = Excel.CreateExcelFileWithDataTable(resultset, HttpContext.Current.Session["UserCode"] + "_reporte Por Unidad", path, "xlsx", true);
-                //HttpContext.Current.Session["reportePorAssesorPath"] = path + reporte;
             }
             catch (OracleException excep)
             {
@@ -194,7 +182,7 @@ namespace DataAccess
             return reportePorAsesor;
         }
 
-        public List<ResumenPorAuditoria> GetReportePorAudit(string DateFrom, string DateTo)
+        public List<ResumenPorAuditoria> GetReportByAuditory(string dateFrom, string dateTo, string userCode, string path)
         {
             List<ResumenPorAuditoria> reportePorAsesorList = new List<ResumenPorAuditoria>();
             DataTable resultset = null, resultsetCavnBook = null, resultsetCredit = null;
@@ -234,8 +222,8 @@ namespace DataAccess
             try
             {
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(DateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(DateTo, new CultureInfo("en-US")) },
+                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
+                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo, new CultureInfo("en-US")) },
                     new OracleParameter("ResultSet1", OracleDbType.RefCursor) {Direction = ParameterDirection.Output}
                 };
 
@@ -331,10 +319,8 @@ namespace DataAccess
                     tbl.Rows.Add(row);
                                           
                 }
-
-                string path = HttpContext.Current.Server.MapPath("~/Content/Report/");
-
-                var reporte = Excel.CreateExcelFileWithDataTable(tbl, HttpContext.Current.Session["UserCode"] + "_reporte Por Auditoria", path, "xlsx", true);
+                
+                var reporte = Excel.CreateExcelFileWithDataTable(tbl, userCode + "_reporte Por Auditoria", path, "xlsx", true);
                 HttpContext.Current.Session["reportePorAuditoriaPath"] = path + reporte;
             
             }
@@ -353,7 +339,7 @@ namespace DataAccess
             return reportePorAsesorList;
         }
 
-        public List<ResumenPorDatoVital> GetReportePorDatoVital(string DateFrom, string DateTo)
+        public List<ResumenPorDatoVital> GetReportByVitalData(string dateFrom, string dateTo)
         {
             List<ResumenPorDatoVital> resumentPorDatoVital = null;
             DataSet resultset = null;
@@ -363,8 +349,8 @@ namespace DataAccess
             try
             {                
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(DateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(DateTo, new CultureInfo("en-US")) },
+                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
+                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo, new CultureInfo("en-US")) },
                     new OracleParameter("ResultSet", OracleDbType.RefCursor) {Direction = ParameterDirection.Output},
                 };
 
@@ -414,13 +400,7 @@ namespace DataAccess
 
                     }
                 }
-
-
-                //string path = HttpContext.Current.Server.MapPath("~/Content/Report/");
-
-                //var reporte = Excel.CreateExcelFileWithDataTable(resultset.Tables[0], HttpContext.Current.Session["UserCode"] + "_reporte Por Dato Vital", path, "xlsx", true);
-                //HttpContext.Current.Session["reportePorDatpVital"] = path + reporte;
-
+                
             }
             catch (OracleException excep)
             {

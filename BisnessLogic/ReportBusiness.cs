@@ -15,54 +15,78 @@ namespace BisnessLogic
 {
     public class ReportBusiness
     {
-        public List<ResumenPorUnidad> GetReporteResumenPorUnidad(string DateFrom, string DateTo)
+        /// <summary>
+        /// Permite obtener el reporte por unidad
+        /// </summary>
+        /// <param name="dateFrom">fecha de donde se tomara</param>
+        /// <param name="dateTo">fecha hasta don de se tomara</param>
+        /// <param name="userCode">userio logueado en sistema</param>
+        /// <param name="path">ruta donde se guardara el reporte</param>
+        /// <returns>void</returns>
+        public void GetReportByUnit(string dateFrom, string dateTo, string userCode, string path)
         {
-            List<ResumenPorUnidad> listaPorUnidad = new ReportData().GetReporteResumenPorUnidad(DateFrom, DateTo);
+            List<ResumenPorUnidad> listaPorUnidad = new ReportData().GetReportByUnit(dateFrom, dateTo);
 
-            if (listaPorUnidad.Count > 0)
+            if (listaPorUnidad != null)
             {
-                writeReportPerUnit(listaPorUnidad);
-            }            
-
-            return listaPorUnidad;
-        }
-
-        public List<ResumenPorAsesor> GetReportePorAsesor(string DateFrom, string DateTo)
-        {
-
-            List<ResumenPorAsesor> listaPorUnidad = new ReportData().GetReportePorAsesor(DateFrom, DateTo);
-            
-            if (listaPorUnidad.Count > 0)
-            {
-                writeReportPerEjecutive(listaPorUnidad);                
+                GetReportByUnit(listaPorUnidad, userCode, path);
             }
-            
-            return listaPorUnidad;
         }
 
-        public List<ResumenPorAuditoria> GetReportePorAudit(string DateFrom, string DateTo)
+        /// <summary>
+        /// Permite obtener el reporte por asesor
+        /// </summary>
+        /// <param name="dateFrom">fecha de donde se tomara</param>
+        /// <param name="dateTo">fecha hasta don de se tomara</param>
+        /// <param name="userCode">userio logueado en sistema</param>
+        /// <param name="path">ruta donde se guardara el reporte</param>
+        /// <returns>void</returns>
+        public void GetReportByAsesor(string dateFrom, string dateTo, string userCode, string path)
         {
-            return new ReportData().GetReportePorAudit(DateFrom, DateTo);
-        }
 
-        public List<ResumenPorDatoVital> GetReportePorDatoVital(string DateFrom, string DateTo)
-        {
-            List<ResumenPorDatoVital> listaPorDatoVital = new ReportData().GetReportePorDatoVital(DateFrom, DateTo);
-           
-            if (listaPorDatoVital.Count > 0)
+            List<ResumenPorAsesor> listaPorAsesor = new ReportData().GetReportByAsesor(dateFrom, dateTo);
+
+            if (listaPorAsesor != null)
             {
-                writeReportPerDatoVital(listaPorDatoVital);
+                GetReportByAsesor(listaPorAsesor, userCode, path);
             }
-            
-            return listaPorDatoVital;
         }
 
-        private void writeReportPerUnit(List<ResumenPorUnidad> listaPorUnidad) 
+        /// <summary>
+        /// Permite obtener el reporte por auditoria
+        /// </summary>
+        /// <param name="dateFrom">fecha de donde se tomara</param>
+        /// <param name="dateTo">fecha hasta don de se tomara</param>
+        /// <param name="userCode">userio logueado en sistema</param>
+        /// <param name="path">ruta donde se guardara el reporte</param>
+        /// <returns>void</returns>
+        public void GetReportByAuditory(string dateFrom, string dateTo, string userCode, string path)
         {
+            new ReportData().GetReportByAuditory(dateFrom, dateTo, userCode, path);
+        }
 
-            string path = HttpContext.Current.Server.MapPath("~/Content/Report/");
-            string file = path + HttpContext.Current.Session["UserCode"] + "_reporte Por Unidad.xlsx";
-            
+        /// <summary>
+        /// Permite obtener el reporte por dato vital
+        /// </summary>
+        /// <param name="dateFrom">fecha de donde se tomara</param>
+        /// <param name="dateTo">fecha hasta don de se tomara</param>
+        /// <param name="userCode">userio logueado en sistema</param>
+        /// <param name="path">ruta donde se guardara el reporte</param>
+        /// <returns>List<ResumenPorDatoVital></returns>
+        public void GetReportByVitalData(string dateFrom, string dateTo, string userCode, string path)
+        {
+            List<ResumenPorDatoVital> listaPorDatoVital = new ReportData().GetReportByVitalData(dateFrom, dateTo);
+
+            if (listaPorDatoVital != null)
+            {
+                GetReportByVitalData(listaPorDatoVital, userCode, path);
+            }
+        }
+
+        private void GetReportByUnit(List<ResumenPorUnidad> listaPorUnidad, string userCode, string path)
+        {
+            string file = path + userCode + "_reporte Por Unidad.xlsx";
+
             int row = 0;
 
             var wb = new XLWorkbook();
@@ -85,10 +109,10 @@ namespace BisnessLogic
 
             ws.Column("B").Width = 17;
 
-            int count = listaPorUnidad.Count-1;
+            int count = listaPorUnidad.Count - 1;
             for (int i = 0; i <= count; i++)
             {
-                
+
                 row = i + 4;
 
                 ws.Cell(row, 1).Value = listaPorUnidad[i].Unidad;
@@ -98,9 +122,10 @@ namespace BisnessLogic
                 {
                     if (listaPorUnidad[i].Porcentaje > 20)
                     {
-                        ws.Cell(row, 4).Value = listaPorUnidad[i].Porcentaje +"%";
+                        ws.Cell(row, 4).Value = listaPorUnidad[i].Porcentaje + "%";
                         ws.Range("A" + (row) + ":E" + (row) + "").Cells().Style.Font.FontColor = XLColor.Red;
-                    }else
+                    }
+                    else
                     {
                         ws.Cell(row, 4).Value = listaPorUnidad[i].Porcentaje + "%";
                     }
@@ -123,7 +148,7 @@ namespace BisnessLogic
                     ws.Cell(row, 2).Value = listaPorUnidad[i].Calificacion;
                 }
 
-               
+
                 ws.Cell(row, 5).Value = listaPorUnidad[i].NiTotal;
                 ws.Cell(row, 5).Style.NumberFormat.Format = "#,###";
             }
@@ -145,15 +170,13 @@ namespace BisnessLogic
 
             wb.SaveAs(file);
             wb.Dispose();
-            HttpContext.Current.Session["reportePorUnidadPath"] = file;
+            //HttpContext.Current.Session["reportePorUnidadPath"] = file;
 
         }
 
-        private void writeReportPerDatoVital(List<ResumenPorDatoVital> listaPorDatoVital)
+        private void GetReportByVitalData(List<ResumenPorDatoVital> listaPorDatoVital, string userCode, string path)
         {
-
-            string path = HttpContext.Current.Server.MapPath("~/Content/Report/");
-            string file = path + HttpContext.Current.Session["UserCode"] + "_reporte Por dato vital.xlsx";
+            string file = path + userCode + "_reporte Por dato vital.xlsx";
 
             int row = 0;
 
@@ -252,46 +275,48 @@ namespace BisnessLogic
 
                 if (listaPorDatoVital[i].TotalDeIncidencias > 9)
                 {
-                    ws.Range("H"+row+":O"+row+"").Cells().Style.Fill.BackgroundColor = XLColor.Orange;
+                    ws.Range("H" + row + ":O" + row + "").Cells().Style.Fill.BackgroundColor = XLColor.Orange;
                 }
-                               
+
             }
 
-                        
-            if (listaPorDatoVital[count].Pregunta3 > 9)
+            if (count > 0)
             {
-                ws.Range("H4:H" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
-            }
+                if (listaPorDatoVital[count].Pregunta3 > 9)
+                {
+                    ws.Range("H4:H" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
+                }
 
-            if (listaPorDatoVital[count].Pregunta4 > 9)
-            {
-                ws.Range("I4:I" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
-            }
+                if (listaPorDatoVital[count].Pregunta4 > 9)
+                {
+                    ws.Range("I4:I" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
+                }
 
-            if (listaPorDatoVital[count].Pregunta5 > 9)
-            {
-                ws.Range("J4:J" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
-            }
+                if (listaPorDatoVital[count].Pregunta5 > 9)
+                {
+                    ws.Range("J4:J" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
+                }
 
-            if (listaPorDatoVital[count].Pregunta6 > 9)
-            {
-                ws.Range("K4:K" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
-            }
+                if (listaPorDatoVital[count].Pregunta6 > 9)
+                {
+                    ws.Range("K4:K" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
+                }
 
-            if (listaPorDatoVital[count].Pregunta7 > 9)
-            {
-                ws.Range("L4:L" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
-            }
+                if (listaPorDatoVital[count].Pregunta7 > 9)
+                {
+                    ws.Range("L4:L" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
+                }
 
-            if (listaPorDatoVital[count].Pregunta8 > 9)
-            {
-                ws.Range("M4:M" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
-            }
+                if (listaPorDatoVital[count].Pregunta8 > 9)
+                {
+                    ws.Range("M4:M" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
+                }
 
-            if (listaPorDatoVital[count].Pregunta9 > 9)
-            {
-                ws.Range("N4:N" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
-            }
+                if (listaPorDatoVital[count].Pregunta9 > 9)
+                {
+                    ws.Range("N4:N" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
+                }
+            }            
 
             ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorder = XLBorderStyleValues.Thick;
             ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorderColor = XLColor.DarkBlue;
@@ -315,15 +340,11 @@ namespace BisnessLogic
 
             wb.SaveAs(file);
             wb.Dispose();
-            HttpContext.Current.Session["reportePorDatpVital"] = file;
-
         }
 
-        private void writeReportPerEjecutive(List<ResumenPorAsesor> listaPorUnidad)
+        private void GetReportByAsesor(List<ResumenPorAsesor> listaPorUnidad, string userCode, string path)
         {
-
-            string path = HttpContext.Current.Server.MapPath("~/Content/Report/");
-            string file = path + HttpContext.Current.Session["UserCode"] + "_reporte Por ejecutivo.xlsx";
+            string file = path + userCode + "_reporte Por ejecutivo.xlsx";
 
             int row = 0;
 
@@ -362,15 +383,15 @@ namespace BisnessLogic
                 {
                     ws.Cell(row, 1).Value = listaPorUnidad[i].Unidad;
                 }
-                else 
+                else
                 {
-                    if (listaPorUnidad[i-1].Ejecutivo == "TOTAL:")
+                    if (listaPorUnidad[i - 1].Ejecutivo == "TOTAL:")
                     {
-                        ws.Cell(row, 1).Value = listaPorUnidad[i].Unidad;    
+                        ws.Cell(row, 1).Value = listaPorUnidad[i].Unidad;
                     }
                 }
 
-                
+
 
                 ws.Cell(row, 2).Value = listaPorUnidad[i].Ejecutivo;
                 ws.Cell(row, 3).Value = listaPorUnidad[i].TotalLamadas;
@@ -379,7 +400,7 @@ namespace BisnessLogic
 
                 if (listaPorUnidad[i].PorcentajeInvalidas > 20)
                 {
-                    ws.Cell(row, 5).Value = listaPorUnidad[i].PorcentajeInvalidas +"%";
+                    ws.Cell(row, 5).Value = listaPorUnidad[i].PorcentajeInvalidas + "%";
                     ws.Range("A" + (row) + ":E" + (row) + "").Cells().Style.Font.FontColor = XLColor.Red;
                 }
 
@@ -417,14 +438,12 @@ namespace BisnessLogic
 
 
             //ws.Range("E4:E" + (count + 3)).Cells().DataType = XLCellValues.Number;
-            
+
             wb.SaveAs(file);
             wb.Dispose();
-            HttpContext.Current.Session["reportePorAssesorPath"] = file;
+            //HttpContext.Current.Session["reportePorAssesorPath"] = file;
 
         }
-    
+
     }
-
-
 }
