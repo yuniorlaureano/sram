@@ -33,6 +33,17 @@ namespace DataAccess.Repository
                     this.schema = schema;
                 }
 
+                if (this.schema != schema)
+                {
+                    if (this.oracleConnection.State == ConnectionState.Open)
+                    {
+                        this.CloseConnection();
+                    }
+
+                    oracleConnection = new OracleConnection(connectionManager.SetConnectionString(schema));
+                    this.schema = schema;
+                }
+
                 if (this.oracleConnection.State == ConnectionState.Closed)
                 {
                     oracleConnection.Open();
@@ -58,29 +69,18 @@ namespace DataAccess.Repository
                 throw excep;
             }
         }
-
-
+        
         public DataSet ExecuteDataAdapter(string query, OracleParameter[] oracleParameters, CommandType commandType, Schema schema)
         {
             DataSet resultset = new DataSet();
             
             try
             {
-                if (this.schema != schema && this.oracleConnection != null)
-                {
-                    if (this.oracleConnection.State == ConnectionState.Open)
-                    {
-                        this.CloseConnection();
-                    }
-
-                    this.oracleConnection = null;
-                }
-
                 this.OpenConnection(schema);
                 OracleCommand oracleCommand = new OracleCommand(query,this.oracleConnection);
                 oracleCommand.CommandType = commandType;
 
-                if (oracleParameters.Length > 0)
+                if (oracleParameters != null)
                 {
                     oracleCommand.Parameters.AddRange(oracleParameters);
                 }
@@ -106,21 +106,11 @@ namespace DataAccess.Repository
 
             try
             {
-                if (this.schema != schema && this.oracleConnection != null)
-                {
-                    if (this.oracleConnection.State == ConnectionState.Open)
-                    {
-                        this.CloseConnection();
-                    }
-
-                    this.oracleConnection = null;
-                }
-
                 this.OpenConnection(schema);
                 OracleCommand oracleCommand = new OracleCommand(query,this.oracleConnection);
                 oracleCommand.CommandType = commandType;
 
-                if (oracleParameters.Length > 0)
+                if (oracleParameters != null)
                 {
                     oracleCommand.Parameters.AddRange(oracleParameters);
                 }
@@ -136,5 +126,29 @@ namespace DataAccess.Repository
             return resultset;
         }
 
+        public OracleDataReader ExecuteDataReader(string query, OracleParameter[] oracleParameters, CommandType commandType, Schema schema)
+        {
+            OracleDataReader reader;
+
+            try
+            {
+                this.OpenConnection(schema);
+                OracleCommand oracleCommand = new OracleCommand(query, this.oracleConnection);
+                oracleCommand.CommandType = commandType;
+
+                if (oracleParameters != null)
+                {
+                    oracleCommand.Parameters.AddRange(oracleParameters);
+                }
+
+                reader = oracleCommand.ExecuteReader();
+            }
+            catch (OracleException excep)
+            {
+                throw excep;
+            }
+
+            return reader;
+        }
     }
 }

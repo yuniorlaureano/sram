@@ -12,6 +12,9 @@ using ClosedXML;
 using System.Web;
 using System.Web.Hosting;
 using System.Globalization;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 
 namespace DataAccess
@@ -28,8 +31,8 @@ namespace DataAccess
 
         public List<ResumenPorUnidad> GetReportByUnit(string dateFrom, string dateTo)
         {
-            List<ResumenPorUnidad> resumentPorUnidad = null;
-            DataTable resultset = null;
+            List<ResumenPorUnidad> resumentPorUnidad = new List<ResumenPorUnidad>();
+            OracleDataReader resultset = null;
             decimal porcementajeValido = 0;
             decimal porcementajeInvalido = 0;
             int totalDeLlamadas = 0;
@@ -40,23 +43,25 @@ namespace DataAccess
             {
 
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo, new CultureInfo("en-US")) },
-                    new OracleParameter("ResultSet", OracleDbType.RefCursor) {Direction = ParameterDirection.Output},
+                    new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
+                    new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sp_get_stat_by_unit_yn", oracleParameter, CommandType.StoredProcedure, Schema.SFA).Tables[0];
+                resultset = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_stat_by_unit", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);
 
                 
-                resumentPorUnidad = resultset.AsEnumerable().Select(
-                    subscrb => new ResumenPorUnidad
-                    {
-                        Unidad = subscrb["UNIDAD"].ToString(),
-                        Calificacion = subscrb["CALIFICACION"].ToString(),
-                        TotalLamadas = int.Parse(subscrb["Total de Llamadas"].ToString()),
-                        Porcentaje = decimal.Parse(subscrb["PORCENTAJE"].ToString()),
-                        NiTotal = double.Parse(subscrb["NI Total"].ToString()),
-                    }).ToList();
+                while(resultset.Read())
+                {
+                    resumentPorUnidad.Add(
+                        new ResumenPorUnidad() {
+                            Unidad = resultset["UNIDAD"].ToString(),
+                            Calificacion = resultset["CALIFICACION"].ToString(),
+                            TotalLamadas = int.Parse(resultset["Total de Llamadas"].ToString()),
+                            Porcentaje = decimal.Parse(resultset["PORCENTAJE"].ToString()),
+                            NiTotal = double.Parse(resultset["NI Total"].ToString())
+                        });
+                }
 
                 //Iterar el resultset, cada ves que encuentre el label Total por unidad:
                 int totalPorNidadCount = (resumentPorUnidad.Count - 1);
@@ -117,8 +122,10 @@ namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return resumentPorUnidad;
@@ -126,8 +133,8 @@ namespace DataAccess
 
         public List<ResumenPorAsesor> GetReportByAsesor(string dateFrom, string dateTo)
         {
-            List<ResumenPorAsesor> reportePorAsesor = null;
-            DataTable resultset = null;
+            List<ResumenPorAsesor> reportePorAsesor = new List<ResumenPorAsesor>();
+            OracleDataReader resultset = null;
             decimal porcentajeInvalidas = 0;
             int totalDeLlamadas = 0;
             int invalidas = 0;
@@ -136,22 +143,24 @@ namespace DataAccess
             {
 
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo , new CultureInfo("en-US")) },
-                    new OracleParameter("ResultSet", OracleDbType.RefCursor) {Direction = ParameterDirection.Output},
+                    new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
+                    new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sp_get_stat_by_assesor_yn", oracleParameter, CommandType.StoredProcedure, Schema.SFA).Tables[0];
+                resultset = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_stat_by_assesor", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);
 
-                reportePorAsesor = resultset.AsEnumerable().Select(
-                    subscrb => new ResumenPorAsesor
-                    {
-                        Unidad = subscrb["Unidad"].ToString(),
-                        Ejecutivo = subscrb["Ejecutivo"].ToString(),
-                        TotalLamadas = int.Parse(subscrb["Total de Llamadas"].ToString()),
-                        TotalInvalidas = int.Parse(subscrb["Total Invalidas"].ToString()),
-                        PorcentajeInvalidas = decimal.Parse(subscrb["Porcentaje Invalidas"].ToString()),
-                    }).ToList();
+                while(resultset.Read())
+                {
+                    reportePorAsesor.Add(new ResumenPorAsesor() {
+
+                        Unidad = resultset["Unidad"].ToString(),
+                        Ejecutivo = resultset["Ejecutivo"].ToString(),
+                        TotalLamadas = int.Parse(resultset["Total de Llamadas"].ToString()),
+                        TotalInvalidas = int.Parse(resultset["Total Invalidas"].ToString()),
+                        PorcentajeInvalidas = decimal.Parse(resultset["Porcentaje Invalidas"].ToString())
+                    });
+                }
 
                 int totalPorNidadCount = reportePorAsesor.Count;
                 for (int i = 0; i < totalPorNidadCount; i++)
@@ -175,8 +184,10 @@ namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return reportePorAsesor;
@@ -185,144 +196,53 @@ namespace DataAccess
         public List<ResumenPorAuditoria> GetReportByAuditory(string dateFrom, string dateTo, string userCode, string path)
         {
             List<ResumenPorAuditoria> reportePorAsesorList = new List<ResumenPorAuditoria>();
-            DataTable resultset = null, resultsetCavnBook = null, resultsetCredit = null;
             ResumenPorAuditoria reportePorAssesor = null;
-
-            DataTable tbl = new DataTable("Reporte Por Auditoria");
-            DataColumn[] columnasAuditoria = { 
-                new DataColumn(){ColumnName = "Fecha RDV"},
-                new DataColumn(){ColumnName = "Rozón Social"},
-                new DataColumn(){ColumnName = "Subscriber Id"},
-                new DataColumn(){ColumnName = "Canva"},
-                new DataColumn(){ColumnName = "Edición"},
-                new DataColumn(){ColumnName = "Cargo"},
-                new DataColumn(){ColumnName = "Monto"},
-                new DataColumn(){ColumnName = "Tarjeta"},
-                new DataColumn(){ColumnName = "Ejecutivo"},
-                new DataColumn(){ColumnName = "Unidad"},
-                new DataColumn(){ColumnName = "P1"},
-                new DataColumn(){ColumnName = "P2"},
-                new DataColumn(){ColumnName = "P3"},
-                new DataColumn(){ColumnName = "P4"},
-                new DataColumn(){ColumnName = "P5"},
-                new DataColumn(){ColumnName = "P6"},
-                new DataColumn(){ColumnName = "P7"},
-                new DataColumn(){ColumnName = "P8"},
-                new DataColumn(){ColumnName = "P9"},
-                new DataColumn(){ColumnName = "P10"},
-                new DataColumn(){ColumnName = "Resultado"},
-                new DataColumn(){ColumnName = "Es Código 34"},
-                new DataColumn(){ColumnName = "Es Descarga Administrativa"},
-                new DataColumn(){ColumnName = "Es Descarga Reauditoría"},
-                new DataColumn(){ColumnName = "Call Id"},
-            };
-
-            tbl.Columns.AddRange(columnasAuditoria);
+            OracleDataReader reader = null;
 
             try
             {
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo, new CultureInfo("en-US")) },
-                    new OracleParameter("ResultSet1", OracleDbType.RefCursor) {Direction = ParameterDirection.Output}
+                    new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
+                    new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sp_get_report_by_udit_yn", oracleParameter, CommandType.StoredProcedure, Schema.SFA).Tables[0];
+                reader = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_report_by_audit", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);
 
-                foreach (DataRow resume in resultset.Rows)
+                while(reader.Read())
                 {
                     reportePorAssesor = new ResumenPorAuditoria();
 
-                    reportePorAssesor.Unidad = resume["REP_UNIT"].ToString();
-                    reportePorAssesor.CallId = resume["CALL_ID"].ToString();
-                    reportePorAssesor.Ejecutivo = resume["STAFFNAME"].ToString();
-                    reportePorAssesor.Canva = resume["CANV_CODE"].ToString();
-                    reportePorAssesor.cargo = double.Parse(resume["CARGO"].ToString());
-                    reportePorAssesor.EsDescargaAdministrativa = resume["ISDESCARGAADM"].ToString();
-                    reportePorAssesor.EsDescargaReauditoria = resume["ISDESCARGAREAUDITORIA"].ToString();
-                    reportePorAssesor.FechaRDV = ((DateTime)resume["REP_SALES_DATE"]).ToString("MM/dd/yyyy");
-                    reportePorAssesor.isCodigo34 = "No";
-                    reportePorAssesor.Monto = double.Parse(resume["REP_NETO"].ToString());
-                    reportePorAssesor.P1 = resume["PREGUNTA_1"].ToString();
-                    reportePorAssesor.P10 = resume["PREGUNTA_10"].ToString();
-                    reportePorAssesor.P2 = resume["PREGUNTA_2"].ToString();
-                    reportePorAssesor.P3 = resume["PREGUNTA_3"].ToString();
-                    reportePorAssesor.P4 = resume["PREGUNTA_4"].ToString();
-                    reportePorAssesor.P5 = resume["PREGUNTA_5"].ToString();
-                    reportePorAssesor.P6 = resume["PREGUNTA_6"].ToString();
-                    reportePorAssesor.P7 = resume["PREGUNTA_7"].ToString();
-                    reportePorAssesor.P8 = resume["PREGUNTA_8"].ToString();
-                    reportePorAssesor.P9 = resume["PREGUNTA_9"].ToString();
-                    reportePorAssesor.RazonSocial = resume["NAME"].ToString();
-                    reportePorAssesor.Result = resume["RESULTADO"].ToString();
-                    reportePorAssesor.SubscriberId = resume["REP_SUBSCR_ID"].ToString();
-                    reportePorAssesor.Tarjeta = resume["STF_CODIGO"].ToString();
-                    reportePorAssesor.Edicion = resume["CANV_EDITION"].ToString();
-                    //reportePorAssesor.BookCode = resume["Book_Code"].ToString();
-
-                    resultsetCavnBook = oracleBasicsOperations.ExecuteDataAdapter("sfa.sra_get_subscr_canv_books", new OracleParameter[] { 
-                           new OracleParameter("v_SubscrId",OracleDbType.Int32){ Value      = reportePorAssesor.SubscriberId },
-                           new OracleParameter("v_CanvCode",OracleDbType.Varchar2) { Value  = reportePorAssesor.Canva },
-                           new OracleParameter("v_CanvEdition", OracleDbType.Int32) { Value = reportePorAssesor.Edicion },
-                           new OracleParameter("ResultSet", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
-                       }, CommandType.StoredProcedure, Schema.SFA).Tables[0];
-
-                    foreach (DataRow rsBook in resultsetCavnBook.Rows)
-                    {
-                        reportePorAssesor.BookCode = rsBook["Book_Code"].ToString();
-                       
-                        resultsetCredit = oracleBasicsOperations.ExecuteDataAdapter("YBRDS_PROD.get_subscr_with_credit",
-                        new OracleParameter[] { 
-                           new OracleParameter("v_subscr_id",OracleDbType.Int32){ Value      = reportePorAssesor.SubscriberId },
-                           new OracleParameter("v_canv_edition",OracleDbType.Int32) { Value  = reportePorAssesor.Edicion },
-                           new OracleParameter("v_canv_code", OracleDbType.Varchar2) { Value = reportePorAssesor.Canva },
-                           new OracleParameter("v_book_code", OracleDbType.Varchar2) { Value = reportePorAssesor.BookCode },
-                           new OracleParameter("ref_cursor", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
-                       }, CommandType.StoredProcedure, Schema.YBRDS_PROD).Tables[0];
-
-                        if (resultsetCredit.Rows.Count > 0)
-                        {
-                            reportePorAssesor.isCodigo34 = "Si";
-                        }
-                    }
+                    reportePorAssesor.Unidad = reader["REP_UNIT"].ToString();
+                    reportePorAssesor.CallId = reader["CALL_ID"].ToString();
+                    reportePorAssesor.Ejecutivo = reader["STAFFNAME"].ToString();
+                    reportePorAssesor.Canva = reader["CANV_CODE"].ToString();
+                    reportePorAssesor.cargo = double.Parse(reader["CARGO"].ToString());
+                    reportePorAssesor.EsDescargaAdministrativa = reader["ISDESCARGAADM"].ToString();
+                    reportePorAssesor.EsDescargaReauditoria = reader["ISDESCARGAREAUDITORIA"].ToString();
+                    reportePorAssesor.FechaRDV = ((DateTime)reader["REP_SALES_DATE"]).ToString("MM/dd/yyyy");
+                    reportePorAssesor.isCodigo34 = reader["is_34_code"].ToString();
+                    reportePorAssesor.Monto = double.Parse(reader["REP_NETO"].ToString());
+                    reportePorAssesor.P1 = reader["PREGUNTA_1"].ToString();
+                    reportePorAssesor.P10 = reader["PREGUNTA_10"].ToString();
+                    reportePorAssesor.P2 = reader["PREGUNTA_2"].ToString();
+                    reportePorAssesor.P3 = reader["PREGUNTA_3"].ToString();
+                    reportePorAssesor.P4 = reader["PREGUNTA_4"].ToString();
+                    reportePorAssesor.P5 = reader["PREGUNTA_5"].ToString();
+                    reportePorAssesor.P6 = reader["PREGUNTA_6"].ToString();
+                    reportePorAssesor.P7 = reader["PREGUNTA_7"].ToString();
+                    reportePorAssesor.P8 = reader["PREGUNTA_8"].ToString();
+                    reportePorAssesor.P9 = reader["PREGUNTA_9"].ToString();
+                    reportePorAssesor.RazonSocial = reader["NAME"].ToString();
+                    reportePorAssesor.Result = reader["RESULTADO"].ToString();
+                    reportePorAssesor.SubscriberId = reader["REP_SUBSCR_ID"].ToString();
+                    reportePorAssesor.Tarjeta = reader["STF_CODIGO"].ToString();
+                    reportePorAssesor.Edicion = reader["CANV_EDITION"].ToString();
+                    reportePorAssesor.BookCode = reader["Book_Code"].ToString();
 
                     reportePorAsesorList.Add(reportePorAssesor);
-
-                    var row = tbl.NewRow();
-
-                    row["Fecha RDV"] = reportePorAssesor.FechaRDV;
-                    row["Rozón Social"] = reportePorAssesor.RazonSocial;
-                    row["Subscriber Id"] = reportePorAssesor.SubscriberId;
-                    row["Canva"] = reportePorAssesor.Canva;
-                    row["Edición"] = reportePorAssesor.Edicion;
-                    row["Cargo"] = reportePorAssesor.cargo;
-                    row["Monto"] = reportePorAssesor.Monto;
-                    row["Tarjeta"] = reportePorAssesor.Tarjeta;
-                    row["Ejecutivo"] = reportePorAssesor.Ejecutivo;
-                    row["Unidad"] = reportePorAssesor.Unidad;
-                    row["P1"] = reportePorAssesor.P1;
-                    row["P2"] = reportePorAssesor.P2;
-                    row["P3"] = reportePorAssesor.P3;
-                    row["P4"] = reportePorAssesor.P4;
-                    row["P5"] = reportePorAssesor.P5;
-                    row["P6"] = reportePorAssesor.P6;
-                    row["P7"] = reportePorAssesor.P7;
-                    row["P8"] = reportePorAssesor.P8;
-                    row["P9"] = reportePorAssesor.P9;
-                    row["P10"] = reportePorAssesor.P10;
-                    row["Resultado"] = reportePorAssesor.Result;
-                    row["Es Código 34"] = reportePorAssesor.isCodigo34;
-                    row["Es Descarga Administrativa"] = reportePorAssesor.EsDescargaAdministrativa;
-                    row["Es Descarga Reauditoría"] = reportePorAssesor.EsDescargaReauditoria;
-                    row["Call Id"] = reportePorAssesor.CallId;
-
-                    tbl.Rows.Add(row);
-                                          
                 }
-                
-                var reporte = Excel.CreateExcelFileWithDataTable(tbl, userCode + "_reporte Por Auditoria", path, "xlsx", true);
-                HttpContext.Current.Session["reportePorAuditoriaPath"] = path + reporte;
-            
+                            
             }
             catch (OracleException excep)
             {
@@ -330,10 +250,12 @@ namespace DataAccess
             }
             finally
             {
-                if (resultset != null)
+                if (reader != null)
                 {
-                    resultset.Dispose();
+                    reader.Close();                    
                 }
+
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return reportePorAsesorList;
@@ -341,44 +263,46 @@ namespace DataAccess
 
         public List<ResumenPorDatoVital> GetReportByVitalData(string dateFrom, string dateTo)
         {
-            List<ResumenPorDatoVital> resumentPorDatoVital = null;
-            DataSet resultset = null;
+            List<ResumenPorDatoVital> resumentPorDatoVital = new List<ResumenPorDatoVital>();
+            OracleDataReader resultset = null;
             decimal cargoInvalidoVsTotalCargo = 0;
             decimal InvalidasVsTotalAuditadas = 0;
 
             try
             {                
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("v_DateFrom", OracleDbType.Date) {Value = DateTime.Parse(dateFrom, new CultureInfo("en-US"))},
-                    new OracleParameter("v_DateTo", OracleDbType.Date) { Value = DateTime.Parse(dateTo, new CultureInfo("en-US")) },
-                    new OracleParameter("ResultSet", OracleDbType.RefCursor) {Direction = ParameterDirection.Output},
+                    new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
+                    new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sp_get_stat_by_dato_vital_yn", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
+                resultset = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_stat_by_dato_vital", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);
 
-                resumentPorDatoVital = resultset.Tables[0].AsEnumerable().Select(
-                    subscrb => new ResumenPorDatoVital
-                    {
-                        Unidad = (subscrb["Unidad"].ToString() == null ? "Total:" : subscrb["Unidad"].ToString()),
-                        TotalLlamadas = int.Parse(subscrb["Total de Llamadas Auditadas"].ToString()),
-                        CargoTotal = int.Parse(subscrb["Cargo Total"].ToString()),
-                        Grabaciones = int.Parse(subscrb["Grabaciones Invalidas"].ToString()),
-                        CargoInvalido = int.Parse(subscrb["Cargo Invalido"].ToString()),
-                        InvalidasVsTotalAuditadas = int.Parse(subscrb["Invalidas vs Total Auditadas"].ToString()),
-                        CargoInvalidoVsTotalCargo = int.Parse(subscrb["Cargo Invalido vs Total Cargo"].ToString()),
-                        Pregunta3 = int.Parse(subscrb["Pregunta 3"].ToString()),
-                        Pregunta4 = int.Parse(subscrb["Pregunta 4"].ToString()),
-                        Pregunta5 = int.Parse(subscrb["Pregunta 5"].ToString()),
-                        Pregunta6 = int.Parse(subscrb["Pregunta 6"].ToString()),
-                        Pregunta7 = int.Parse(subscrb["Pregunta 7"].ToString()),
-                        Pregunta8 = int.Parse(subscrb["Pregunta 8"].ToString()),
-                        Pregunta9 = int.Parse(subscrb["Pregunta 9"].ToString())
-                    }).ToList();
+                while(resultset.Read())
+                {
+                    resumentPorDatoVital.Add(new ResumenPorDatoVital() {
+
+                        Unidad = (resultset["Unidad"].ToString() == null ? "Total:" : resultset["Unidad"].ToString()),
+                        TotalLlamadas = int.Parse(resultset["Total de Llamadas Auditadas"].ToString()),
+                        CargoTotal = int.Parse(resultset["Cargo Total"].ToString()),
+                        Grabaciones = int.Parse(resultset["Grabaciones Invalidas"].ToString()),
+                        CargoInvalido = int.Parse(resultset["Cargo Invalido"].ToString()),
+                        InvalidasVsTotalAuditadas = int.Parse(resultset["Invalidas vs Total Auditadas"].ToString()),
+                        CargoInvalidoVsTotalCargo = int.Parse(resultset["Cargo Invalido vs Total Cargo"].ToString()),
+                        Pregunta3 = int.Parse(resultset["Pregunta 3"].ToString()),
+                        Pregunta4 = int.Parse(resultset["Pregunta 4"].ToString()),
+                        Pregunta5 = int.Parse(resultset["Pregunta 5"].ToString()),
+                        Pregunta6 = int.Parse(resultset["Pregunta 6"].ToString()),
+                        Pregunta7 = int.Parse(resultset["Pregunta 7"].ToString()),
+                        Pregunta8 = int.Parse(resultset["Pregunta 8"].ToString()),
+                        Pregunta9 = int.Parse(resultset["Pregunta 9"].ToString())                    
+                    });
+                }
 
 
                 if (resumentPorDatoVital.Count > 0)
                 {
-                    resultset.Tables[0].Rows[resultset.Tables[0].Rows.Count - 1]["Unidad"] = "Total";
+                    resumentPorDatoVital[resumentPorDatoVital.Count - 1].Unidad = "Total";
 
                     int totalPorNidadCount = resumentPorDatoVital.Count;
                     for (int i = 0; i < totalPorNidadCount; i++)
@@ -399,8 +323,7 @@ namespace DataAccess
                         resumentPorDatoVital[i].CargoInvalidoVsTotalCargo = (int)Math.Round(InvalidasVsTotalAuditadas,0);
 
                     }
-                }
-                
+                }                
             }
             catch (OracleException excep)
             {
@@ -410,12 +333,189 @@ namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return resumentPorDatoVital;
         }
+        
+        public void WriteEcelHeader(string[] headers, OpenXmlWriter writer)
+        {
+            List<OpenXmlAttribute> row = new List<OpenXmlAttribute> { new OpenXmlAttribute("r", null, "1") };
+            writer.WriteStartElement(new Row(), row);
+
+            List<OpenXmlAttribute> cell = new List<OpenXmlAttribute> { new OpenXmlAttribute("t", null, "inlineStr") };
+
+            foreach (string h in headers)
+            {
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(h)));
+                writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
+        }
     
+        public void WriterAuditoriExcelValue(List<ResumenPorAuditoria> auditorias, OpenXmlWriter writer)
+        {
+            int currentRow = 0;
+            List<OpenXmlAttribute> row;
+            List<OpenXmlAttribute> cell = new List<OpenXmlAttribute> { new OpenXmlAttribute("t", null, "inlineStr") };
+
+            for (int i = 1; i <= auditorias.Count; i++)
+            {
+                currentRow = i - 1;
+
+                row = new List<OpenXmlAttribute> { new OpenXmlAttribute("r", null, (i + 1).ToString()) };
+                writer.WriteStartElement(new Row(), row);
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].FechaRDV)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].RazonSocial)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].SubscriberId)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].Canva)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].Edicion)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].cargo.ToString())));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].Monto.ToString())));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].Tarjeta)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].Ejecutivo)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].Unidad)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P1)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P2)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P3)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P4)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P5)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P6)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P7)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P8)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P9)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].P10)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].Result)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].isCodigo34)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].EsDescargaAdministrativa)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].EsDescargaReauditoria)));
+                writer.WriteEndElement();
+
+                writer.WriteStartElement(new Cell(), cell);
+                writer.WriteElement(new InlineString(new Text(auditorias[currentRow].CallId)));
+                writer.WriteEndElement();
+                
+                writer.WriteEndElement();
+            }
+        }
+
+        public void WriteAuditoryToExcel(List<ResumenPorAuditoria> auditorias, string sheetName, string fileName, string path)
+        {            
+            string archivo = path + fileName + ".xlsx";
+    
+            using(SpreadsheetDocument workbook = SpreadsheetDocument.Create(archivo, SpreadsheetDocumentType.Workbook))
+            {
+                OpenXmlWriter writer;
+
+                workbook.AddWorkbookPart();
+                WorksheetPart wsp = workbook.WorkbookPart.AddNewPart<WorksheetPart>();
+
+                writer = OpenXmlWriter.Create(wsp);
+                writer.WriteStartElement(new Worksheet());
+                writer.WriteStartElement(new SheetData());
+
+                WriteEcelHeader(new string[]{"Fecha RDV", "Rozón Social", "Subscriber Id", "Canva", "Edición", "Cargo", "Monto", "Tarjeta", "Ejecutivo", "Unidad", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10", "Resultado", "Es Código 34", "Es Descarga Administrativa", "Es Descarga Reauditoría", "Call Id"}, writer);
+                WriterAuditoriExcelValue(auditorias, writer);
+
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.Close();
+
+                writer = OpenXmlWriter.Create(workbook.WorkbookPart);
+                writer.WriteStartElement(new Workbook());
+                writer.WriteStartElement(new Sheets());
+
+                writer.WriteElement(new Sheet()
+                {
+                    Name = sheetName,
+                    SheetId = 1,
+                    Id = workbook.WorkbookPart.GetIdOfPart(wsp)
+                });
+
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.Close();
+
+                workbook.Close();
+            }
+
+        }
     }
 }

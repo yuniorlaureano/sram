@@ -62,7 +62,7 @@ namespace BisnessLogic
         /// <returns>void</returns>
         public void GetReportByAuditory(string dateFrom, string dateTo, string userCode, string path)
         {
-            new ReportData().GetReportByAuditory(dateFrom, dateTo, userCode, path);
+            GetReportByAuditory(new ReportData().GetReportByAuditory(dateFrom, dateTo, userCode, path), userCode, path);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace BisnessLogic
         /// <param name="dateTo">fecha hasta don de se tomara</param>
         /// <param name="userCode">userio logueado en sistema</param>
         /// <param name="path">ruta donde se guardara el reporte</param>
-        /// <returns>List<ResumenPorDatoVital></returns>
+        /// <returns>void</returns>
         public void GetReportByVitalData(string dateFrom, string dateTo, string userCode, string path)
         {
             List<ResumenPorDatoVital> listaPorDatoVital = new ReportData().GetReportByVitalData(dateFrom, dateTo);
@@ -85,7 +85,7 @@ namespace BisnessLogic
 
         private void GetReportByUnit(List<ResumenPorUnidad> listaPorUnidad, string userCode, string path)
         {
-            string file = path + userCode + "_reporte Por Unidad.xlsx";
+            string file = path + userCode + "_reporte por unidad.xlsx";
 
             int row = 0;
 
@@ -176,7 +176,7 @@ namespace BisnessLogic
 
         private void GetReportByVitalData(List<ResumenPorDatoVital> listaPorDatoVital, string userCode, string path)
         {
-            string file = path + userCode + "_reporte Por dato vital.xlsx";
+            string file = path + userCode + "_reporte por dato vital.xlsx";
 
             int row = 0;
 
@@ -344,7 +344,7 @@ namespace BisnessLogic
 
         private void GetReportByAsesor(List<ResumenPorAsesor> listaPorUnidad, string userCode, string path)
         {
-            string file = path + userCode + "_reporte Por ejecutivo.xlsx";
+            string file = path + userCode + "_reporte por ejecutivo.xlsx";
 
             int row = 0;
 
@@ -445,5 +445,10 @@ namespace BisnessLogic
 
         }
 
+        private void GetReportByAuditory(List<ResumenPorAuditoria> auditorias, string userCode, string path)
+        {
+            ReportData rdata = new ReportData();
+            rdata.WriteAuditoryToExcel(auditorias,"Auditory", userCode+"_reporte por auditoria", path);
+        }
     }
 }
