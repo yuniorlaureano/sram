@@ -3,6 +3,11 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var unassignedSummary = Model.GroupBy(u => u.FechaVenta).Select(u => new {
+        Date = u.Key,
+        Count = u.Count()
+    }).ToList();
 }
 
 <div class="row">
@@ -13,7 +18,6 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Asignaciones Pendientes</h3>
             </div>
-            <hr style="border: solid 1px rgb(0, 0, 153);" />
             <div class="panel-body">
                 @if (ViewBag.totalAsignado > 0)
                 {
@@ -33,11 +37,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var sum in unassignedSummary)
                         {
                             <tr>
-                                <td class="sales-date">@item.SalesDate</td>
-                                <td class="pn-assig-acc">@item.Cantidad</td>
+                                <td class="sales-date">@sum.Date</td>
+                                <td class="pn-assig-acc">@sum.Count</td>
                                 <td>
                                     <button class="btn btn-primary asignar-pendiente"><i class="fa fa-thumb-tack" aria-hidden="true"></i></button>
                                 </td>
@@ -62,11 +66,113 @@
         <!--===================================================-->
         <!-- End Row selection and deletion (multiple rows) -->
     </div>
+    <div class="col-sm-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Pendientes a Auditar</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="pad-btm form-inline">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pad-btm">
+                                <button id="demo-foo-collapse" class="btn btn-info"><i class="fa fa-compress" aria-hidden="true"></i></button>
+                                <button id="demo-foo-expand" class="btn btn-warning"><i class="fa fa-expand" aria-hidden="true"></i></button>
+                                <label class="form-inline">
+                                    Show
+                                    <select id="demo-show-entries" class="form-control input-sm">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                    entries
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 text-xs-center text-right">
+                            <div class="form-group">
+                                <input id="demo-foo-search" type="text" placeholder="Search" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table id="pending-table" class="table toggle-circle" data-page-size="10">
+                    <thead>
+                        <tr>
+                            <th data-toggle="true" class="footable-first-column">SubscriberId</th>
+                            <th>Subscriber Name</th>
+                            <th>Teléfono</th>
+                            <th>Canvass</th>
+                            <th>Canvass Edition</th>
+                            <th>Ejecutivo</th>
+                            <th data-hide="phone, tablet">Unidad</th>
+                            <th data-hide="phone, tablet">Venta</th>
+                            <th data-hide="phone, tablet">Fecha Venta</th>
+                            <th data-sort-ignore="true" style="width:180px;"></th>
+                            <th data-hide="all">Cargo</th>
+                            <th data-hide="all">Call Id</th>                            
+                            <th data-hide="all">Book Code</th>
+                            <th data-hide="all">Account Id</th>
+                            <th data-hide="all">Conmentario</th>
+                            <th data-hide="all">PDC Dimmas</th>
+                            <th data-hide="all">PDC Codetel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr data-subscriber="@item.SubscriberId" data-canv-edition="@item.CanvEdition" data-canv-code="@item.Canvass" data-book-code="@item.BookCodeDetail">
+                                <td>@item.SubscriberId</td>
+                                <td>@item.SubscriberName</td>
+                                <td>@item.Telefono</td>
+                                <td>@item.Canvass</td>
+                                <td>@item.CanvEdition</td>
+                                <td>@item.Ejecutivo</td>
+                                <td>@item.Unidad</td>
+                                <td>@item.Venta</td>
+                                <td>@item.FechaVenta</td>
+                                <td>
+                                    <div class="btn-group-xs">
+                                        @if (@item.HassCredit)
+                                        {
+                                            <button type="button" class="btn btn-primary show-credit" data-url="@Url.Action("GetCredits", "Subscriber")">Credit</button>
+                                        }
+
+                                        @if (@item.HassClaim)
+                                        {
+                                            <button type="button" class="btn btn-info show-claim" data-url="@Url.Action("GetClaims", "Subscriber")">Claim</button>
+                                        }
+                                    </div>
+                                </td>
+                                <td>@item.Cargo</td>
+                                <td>@item.CallId</td>
+                                <td>@item.BookCodeDetail</td>
+                                <td>@item.AccountId</td>
+                                <td>@item.Comentario</td>
+                                <td>@item.PDCDimmas</td>
+                                <td>@item.PDCCodetel</td>                                
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5">
+                                <div class="text-left">
+                                    <ul class="pagination"></ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 @RenderPage("~/Views/Shared/_CreditModal.cshtml")
 @RenderPage("~/Views/Shared/_ClaimModal.cshtml")
-@RenderPage("~/Views/Shared/_AuditModal.cshtml")
 @RenderPage("~/Views/Shared/Handlebar/Templates.cshtml")
 
 @section scripts{

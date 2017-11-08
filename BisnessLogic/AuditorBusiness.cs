@@ -11,6 +11,11 @@ namespace BisnessLogic
 {
     public class AuditorBusiness
     {
+        public Auditors GetAuditorsCredentials(string userName)
+        {
+            return new AuditorData().GetAuditorsCredentials(userName);
+        }
+
         public List<Auditors> GetAuditors()
         {
             return new AuditorData().GetAuditors();

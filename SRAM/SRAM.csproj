@@ -190,8 +190,6 @@
     <Compile Include="Models\SubscriberClaimWithCredit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Utils\ListToDataTable.cs" />
-    <Compile Include="Utils\Security.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\SRAM.dll" />
@@ -1696,10 +1694,6 @@
     <ProjectReference Include="..\BisnessLogic\BisnessLogic.csproj">
       <Project>{ba37b92d-58ea-4331-9a51-892d40c66a3e}</Project>
       <Name>BisnessLogic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{7c42ee54-e6f9-41e7-bdde-6304af7402b9}</Project>
-      <Name>DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj">
       <Project>{48ceb3ed-e80e-44de-8399-7123b0e89387}</Project>

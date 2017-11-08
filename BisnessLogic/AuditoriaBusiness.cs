@@ -35,39 +35,32 @@ namespace BisnessLogic
             return new AuditoriaData().AssignAudit(salesDate, selectedAuditor, userCode);
         }
 
-        //public bool ReAssignAudit(List<Entities.ReassignedAudit> reassignedAudit)
-        //{
-        //    bool resultset = false;
-        //    AuditoriaData auditoriaData = new AuditoriaData();
-
-        //    if (reassignedAudit.Count == 0)
-        //    {
-        //        throw new ArgumentNullException("Debe proveer la informacion requerida");
-        //    }
-
-        //    foreach (ReassignedAudit item in reassignedAudit)
-        //    {
-        //        resultset = auditoriaData.ReAssignAudit(item);
-        //    }
-
-        //    auditoriaData.CloseConnnection();
-
-        //    return resultset;
-        //}
-
         public bool ReAssignAudit(int [] assigmentId, int userAssigned, int userCode)
         {
             AuditoriaData auditoriaData = new AuditoriaData();
             string sentencia = "";
+            List<string> sentencias = new List<string>();
+            int count = 0;
 
             foreach (var item in assigmentId)
             {
                 sentencia += "select '" + item + "' as assignment_id, '" + userCode + "' as user_code, '" + userAssigned + "' as user_assigned from dual union ";
+
+                if (count == 20)
+                {
+                    sentencias.Add(sentencia.Substring(0, sentencia.Length - 7));
+                    count = 0;
+                }
+            }
+
+            if (sentencias.Count > 0 && count > 0 && count < 20)
+            {
+                sentencias.Add(sentencia.Substring(0, sentencia.Length - 7));
             }
 
             sentencia = sentencia.Substring(0, sentencia.Length - 7);
 
-            return auditoriaData.ReAssignAudit(sentencia);
+            return auditoriaData.ReAssignAudit(sentencia);//hacer que el metodo reciva una lista y la ejecute con una transaccion.
         }
 
         public List<PenddingAudit> GetAcctInfoByAssignment(string AssignmentId)

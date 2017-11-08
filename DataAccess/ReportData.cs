@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using Entities;
 using DataAccess.Repository;
@@ -45,7 +45,7 @@ namespace DataAccess
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
                     new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
                     new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
-                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
                 resultset = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_stat_by_unit", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);
@@ -145,7 +145,7 @@ namespace DataAccess
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
                     new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
                     new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
-                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
                 resultset = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_stat_by_assesor", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);
@@ -204,7 +204,7 @@ namespace DataAccess
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
                     new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
                     new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
-                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
                 reader = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_report_by_audit", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);
@@ -273,7 +273,7 @@ namespace DataAccess
                 OracleParameter[] oracleParameter = new OracleParameter[] { 
                     new OracleParameter {ParameterName = "v_DateFrom", OracleDbType = OracleDbType.Varchar2, Value = dateFrom},
                     new OracleParameter {ParameterName = "v_DateTo", OracleDbType = OracleDbType.Varchar2, Value = dateTo},
-                    new OracleParameter {ParameterName = "resultset", OracleDbType= Oracle.DataAccess.Client.OracleDbType.RefCursor, Direction = ParameterDirection.Output}
+                    new OracleParameter {ParameterName = "resultset", OracleDbType= OracleDbType.RefCursor, Direction = ParameterDirection.Output}
                 };
 
                 resultset = oracleBasicsOperations.ExecuteDataReader("sram.sp_get_stat_by_dato_vital", oracleParameter, CommandType.StoredProcedure, DataAccess.Repository.Schema.SFA);

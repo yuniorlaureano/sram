@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Entities;
 using DataAccess.Repository;
 using System.Data;
-using Oracle.DataAccess.Client;
+using Oracle.ManagedDataAccess.Client;
 
 
 using System.Globalization;namespace DataAccess
@@ -29,8 +29,8 @@ using System.Globalization;namespace DataAccess
         /// <returns>List<Auditoria></returns>
         public List<Auditoria> GetPendingAudit(string UserCode, string SalesDate)
         {
-            List<Auditoria> auditoria = null;
-            DataSet resultset = null;
+            List<Auditoria> auditoria = new List<Auditoria>();
+            OracleDataReader resultset = null;
             
             try
             {                                
@@ -45,38 +45,38 @@ using System.Globalization;namespace DataAccess
                     new OracleParameter("ResultSet", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
                 };
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sram.sra_get_auditor_pendings", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
-                
-                auditoria = resultset.Tables[0].AsEnumerable().Select(
-                    
-                    pendiente => new Auditoria
-                    {
-                        //Status = pendiente["status"].ToString(),
-                        AssignmentId = pendiente["AssignmentId"].ToString(),
-                        RazonSocial = pendiente["SubscrName"].ToString(),
-                        SubscriberId = pendiente["SubscrId"].ToString(),
-                        Telefono = pendiente["PhoneNo"].ToString(),
-                        Canvass = pendiente["CanvCode"].ToString(),
-                        CanvEdition = pendiente["CanvEdition"].ToString(),
-                        BookCodeDetail = pendiente["product_detail"].ToString(),
-                        Venta = pendiente["ChargeIn"].ToString(),
-                        Ejecutivo = pendiente["StaffName"].ToString(),
-                        Unidad = pendiente["AccountUnit"].ToString(),
-                        FechaRPC = pendiente["SalesDate"].ToString(),
-                        Cargo = pendiente["ChargeOut"].ToString(),
-                        CallId = pendiente["CallId"].ToString(),
-                        ControlVerballCallId = pendiente["ControlVerbalId"].ToString(),
-                        ComentarioEjecutivo = pendiente["Comment"].ToString(),
-                        PDCDimmas = pendiente["PDCDimmas"].ToString(),
-                        PDCCodetel = pendiente["PDCCodetel"].ToString(),
-                        Compania = pendiente["Company"].ToString(),
-                        AuditorAsignado = pendiente["AuditorName"].ToString(),
-                        PrevioCallId = pendiente["PrevAuditedCallId"].ToString(),
-                        HassClaim = pendiente["HAS_CLAIM"].ToString() == "1",
-                        HassCredit = pendiente["HAS_CREDIT"].ToString() == "1",
-                        TipoDeServicio = pendiente["Type_of_Service"].ToString(),
+                resultset = oracleBasicsOperations.ExecuteDataReader("sram.sra_get_auditor_pendings", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
 
-                    }).ToList();
+                while (resultset.Read())
+                {
+                    auditoria.Add(new Auditoria
+                    {
+                        AssignmentId = resultset["AssignmentId"].ToString(),
+                        RazonSocial = resultset["SubscrName"].ToString(),
+                        SubscriberId = resultset["SubscrId"].ToString(),
+                        Telefono = resultset["PhoneNo"].ToString(),
+                        Canvass = resultset["CanvCode"].ToString(),
+                        CanvEdition = resultset["CanvEdition"].ToString(),
+                        BookCodeDetail = resultset["product_detail"].ToString(),
+                        Venta = resultset["ChargeIn"].ToString(),
+                        Ejecutivo = resultset["StaffName"].ToString(),
+                        Unidad = resultset["AccountUnit"].ToString(),
+                        FechaRPC = resultset["SalesDate"].ToString(),
+                        Cargo = resultset["ChargeOut"].ToString(),
+                        CallId = resultset["CallId"].ToString(),
+                        ControlVerballCallId = resultset["ControlVerbalId"].ToString(),
+                        ComentarioEjecutivo = resultset["Comment"].ToString(),
+                        PDCDimmas = resultset["PDCDimmas"].ToString(),
+                        PDCCodetel = resultset["PDCCodetel"].ToString(),
+                        Compania = resultset["Company"].ToString(),
+                        AuditorAsignado = resultset["AuditorName"].ToString(),
+                        PrevioCallId = resultset["PrevAuditedCallId"].ToString(),
+                        HassClaim = resultset["HAS_CLAIM"].ToString() == "1",
+                        HassCredit = resultset["HAS_CREDIT"].ToString() == "1",
+                        TipoDeServicio = resultset["Type_of_Service"].ToString(),
+
+                    });
+                }
             
             }
             catch (OracleException excep)
@@ -87,8 +87,10 @@ using System.Globalization;namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return auditoria;
@@ -136,27 +138,43 @@ using System.Globalization;namespace DataAccess
         /// <returns>List<UnAssignedAudit></returns>
         public List<UnAssignedAudit> GetUnAssignedAudit()
         {
-            List<UnAssignedAudit> unAssignedAudit = null;
-            DataSet resultset = null;
+            List<UnAssignedAudit> unAssignedAudit = new List<UnAssignedAudit>();
+            OracleDataReader resultset = null;
             
-            OracleParameter[] oracleParameter = new OracleParameter[] { 
-                    new OracleParameter("p_sales_date", OracleDbType.Date) {  },
+            OracleParameter[] oracleParameter = new OracleParameter[] {
                     new OracleParameter("ResultSet", OracleDbType.RefCursor) { Direction = ParameterDirection.Output }
                 };
             
             try
             {
 
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sram.sra_get_unassigned_accounts", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
+                resultset = oracleBasicsOperations.ExecuteDataReader("sram.get_unassigned_acc_details", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
 
-                unAssignedAudit = resultset.Tables[0].AsEnumerable().Select(
-                unAssigned =>
-                    new UnAssignedAudit
+                while (resultset.Read())
+                {
+                    unAssignedAudit.Add(new UnAssignedAudit
                     {
-                        Cantidad = unAssigned.Field<decimal>("CANTIDAD"),
-                        SalesDate = unAssigned.Field<DateTime>("SALESDATE").ToString("MM/dd/yyyy")
-                    }).ToList();
-
+                        AccountId = resultset["accountid"].ToString(),
+                        BookCodeDetail = resultset["product_detail"].ToString(),
+                        Canvass = resultset["canvcode"].ToString(),
+                        CanvEdition = resultset["canvedition"].ToString(),
+                        SubscriberId = resultset["subscrid"].ToString(),
+                        Telefono = resultset["phoneno"].ToString(),
+                        SubscriberName = resultset["subscrname"].ToString(),
+                        Ejecutivo = resultset["staffid"].ToString(),
+                        NombreEJecutivo = resultset["staffname"].ToString(),
+                        Unidad = resultset["accountunit"].ToString(),
+                        FechaVenta = resultset["salesdate"].ToString(),
+                        Cargo = resultset["chargeout"].ToString(),
+                        Venta = resultset["chargein"].ToString(),
+                        CallId = resultset["callid"].ToString(),
+                        Comentario = resultset["Comment"].ToString(),
+                        PDCDimmas = resultset["pdcdimmas"].ToString(),
+                        PDCCodetel = resultset["pdccodetel"].ToString(),
+                        HassCredit = resultset["has_credit"].ToString() == "1",
+                        HassClaim = resultset["has_claim"].ToString() == "1",                    
+                    });
+                }                
             }
             catch (OracleException excep)
             {
@@ -166,11 +184,13 @@ using System.Globalization;namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+
+                this.oracleBasicsOperations.CloseConnection();
             }
 
-            return unAssignedAudit.ToList();
+            return unAssignedAudit;
         }
 
         /// <summary>
@@ -211,6 +231,7 @@ using System.Globalization;namespace DataAccess
                     resultset.Dispose();
                 }
             }
+            this.oracleBasicsOperations.CloseConnection();
 
             return afectedRows;
         }
@@ -236,11 +257,14 @@ using System.Globalization;namespace DataAccess
             {
                 oracleBasicsOperations.ExecuteNonQuery("sram.sp_assign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
                 resultset = Convert.ToInt32(oracleParameter[1].Value.ToString()) > 0;
-                this.CloseConnnection();
             }
             catch (OracleException excep)
             {
                 throw excep;
+            }
+            finally
+            {
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return resultset;
@@ -253,8 +277,8 @@ using System.Globalization;namespace DataAccess
         /// <returns>List<PenddingAudit></returns>
         public List<PenddingAudit> GetAcctInfoByAssignment(string AssignmentId)
         {
-            List<PenddingAudit> peddingAudit = null;
-            DataSet resultset = null;
+            List<PenddingAudit> peddingAudit = new List<PenddingAudit>();
+            OracleDataReader resultset = null;
 
             OracleParameter[] oracleParameter = new OracleParameter[] { 
                 new OracleParameter("p_assign_id", OracleDbType.Int32) { Value = AssignmentId },
@@ -263,32 +287,33 @@ using System.Globalization;namespace DataAccess
 
             try
             {
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sram.sra_get_acct_info_by_assign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
+                resultset = oracleBasicsOperations.ExecuteDataReader("sram.sra_get_acct_info_by_assign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
 
-                peddingAudit = resultset.Tables[0].AsEnumerable().Select(
-                    trn => new PenddingAudit
+                while (resultset.Read())
+                {
+                    peddingAudit.Add(new PenddingAudit
                     {
-                        RazonSocial = trn["SubscrName"].ToString(),
-                        SubscriberId = trn["SubscrId"].ToString(),
-                        Telefono = trn["PhoneNo"].ToString(),
-                        Canvass = trn["CanvCode"].ToString(),
-                        Ejecutivo = trn["StaffName"].ToString(),
-                        Unidad = trn["AccountUnit"].ToString(),
-                        FechaRPC = trn["SalesDate"].ToString(),
-                        Cargo = trn["ChargeOut"].ToString(),
-                        Venta = trn["ChargeIn"].ToString(),
-                        CallId = trn["CallId"].ToString(),
-                        ComentarioEjecutivo = trn["Comment"].ToString(),
-                        PDCDimmas = trn["PDCDimmas"].ToString(),
-                        PDCCodetel = trn["PDCCodetel"].ToString(),
-                        Compania = trn["Company"].ToString(),
-                        CustSource = trn["CustSource"].ToString(),
-                        AccountId = trn["AccountId"].ToString(),
-                        BookCodeDetail = trn["product_detail"].ToString(),
-                        ControlVerballCallId = trn["ControlVerbalId"].ToString(),
-                        AuditorName = trn["AuditorName"].ToString(),
-                    }
-                ).ToList();
+                        RazonSocial = resultset["SubscrName"].ToString(),
+                        SubscriberId = resultset["SubscrId"].ToString(),
+                        Telefono = resultset["PhoneNo"].ToString(),
+                        Canvass = resultset["CanvCode"].ToString(),
+                        Ejecutivo = resultset["StaffName"].ToString(),
+                        Unidad = resultset["AccountUnit"].ToString(),
+                        FechaRPC = resultset["SalesDate"].ToString(),
+                        Cargo = resultset["ChargeOut"].ToString(),
+                        Venta = resultset["ChargeIn"].ToString(),
+                        CallId = resultset["CallId"].ToString(),
+                        ComentarioEjecutivo = resultset["Comment"].ToString(),
+                        PDCDimmas = resultset["PDCDimmas"].ToString(),
+                        PDCCodetel = resultset["PDCCodetel"].ToString(),
+                        Compania = resultset["Company"].ToString(),
+                        CustSource = resultset["CustSource"].ToString(),
+                        AccountId = resultset["AccountId"].ToString(),
+                        BookCodeDetail = resultset["product_detail"].ToString(),
+                        ControlVerballCallId = resultset["ControlVerbalId"].ToString(),
+                        AuditorName = resultset["AuditorName"].ToString(),
+                    });
+                }
 
             }
             catch (OracleException excep)
@@ -299,8 +324,9 @@ using System.Globalization;namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return peddingAudit;
@@ -405,8 +431,8 @@ using System.Globalization;namespace DataAccess
         public List<Auditoria> GetDoneAudits(string SubscrId, string Auditor, string SalesDate, string CreationDate, string CallId, string PhoneNo)
         {
 
-            List<Auditoria> peddingAudit = null;
-            DataSet resultset = null;
+            List<Auditoria> peddingAudit = new List<Auditoria>();
+            OracleDataReader resultset = null;
 
             DateTime? salesDate = null, creationDate = null;
             DateTime dummy;
@@ -426,44 +452,44 @@ using System.Globalization;namespace DataAccess
 
             try
             {
-                resultset = oracleBasicsOperations.ExecuteDataAdapter("sram.sra_get_audits", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
+                resultset = oracleBasicsOperations.ExecuteDataReader("sram.sra_get_audits", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
 
-                peddingAudit = resultset.Tables[0].AsEnumerable().Select(
-                    trn => new Auditoria
+                while (resultset.Read())
+                {
+                    peddingAudit.Add(new Auditoria
                     {
-                        Status = trn["STATUS"].ToString(),
-                        AssignmentId = trn["AssignmentId"].ToString(),
-                        RazonSocial = trn["SubscrName"].ToString(),
-                        SubscriberId = trn["SubscrId"].ToString(),
-                        Telefono = trn["PhoneNo"].ToString(),
-                        Canvass = trn["CanvCode"].ToString(),
-                        CanvEdition = trn["CANVEDITION"].ToString(),
-                        BookCodeDetail = trn["product_detail"].ToString(),
-                        Venta = trn["ChargeIn"].ToString(),
-                        Ejecutivo = trn["StaffName"].ToString(),
-                        Unidad = trn["AccountUnit"].ToString(),
-                        FechaRPC = trn["SalesDate"].ToString(),
-                        Cargo = trn["ChargeOut"].ToString(),
-                        CallId = trn["CallId"].ToString(),
-                        ControlVerballCallId = trn["ControlVerbalId"].ToString(),
-                        ComentarioEjecutivo = trn["Comment"].ToString(),
-                        PDCDimmas = trn["PDCDimmas"].ToString(),
-                        PDCCodetel = trn["PDCCodetel"].ToString(),
-                        Compania = trn["Company"].ToString(),
-                        AuditorAsignado = trn["AuditAuditorName"].ToString(),
-                        PrevioCallId = trn["PrevAuditedCallId"].ToString(),
-                        HassClaim = trn["HAS_CLAIM"].ToString() == "1",
-                        HassCredit = trn["HAS_CREDIT"].ToString() == "1",
-                        //-----------------------------------------------
-                        CustSource = trn["CustSource"].ToString(),
-                        AccountId = trn["AccountId"].ToString(),
-                        AuditCreationDate = trn["AuditCreationDate"].ToString(),
-                        AuditResult = trn["AuditResult"].ToString(),
-                        InvalidQuestions = trn["InvalidQuestions"].ToString(),
-                        ComentarioAuditor = trn["Comments"].ToString(),
-                        AuditId = trn["AuditId"].ToString()
-                    }
-                ).ToList();
+                        Status = resultset["STATUS"].ToString(),
+                        AssignmentId = resultset["AssignmentId"].ToString(),
+                        RazonSocial = resultset["SubscrName"].ToString(),
+                        SubscriberId = resultset["SubscrId"].ToString(),
+                        Telefono = resultset["PhoneNo"].ToString(),
+                        Canvass = resultset["CanvCode"].ToString(),
+                        CanvEdition = resultset["CANVEDITION"].ToString(),
+                        BookCodeDetail = resultset["product_detail"].ToString(),
+                        Venta = resultset["ChargeIn"].ToString(),
+                        Ejecutivo = resultset["StaffName"].ToString(),
+                        Unidad = resultset["AccountUnit"].ToString(),
+                        FechaRPC = resultset["SalesDate"].ToString(),
+                        Cargo = resultset["ChargeOut"].ToString(),
+                        CallId = resultset["CallId"].ToString(),
+                        ControlVerballCallId = resultset["ControlVerbalId"].ToString(),
+                        ComentarioEjecutivo = resultset["Comment"].ToString(),
+                        PDCDimmas = resultset["PDCDimmas"].ToString(),
+                        PDCCodetel = resultset["PDCCodetel"].ToString(),
+                        Compania = resultset["Company"].ToString(),
+                        AuditorAsignado = resultset["AuditAuditorName"].ToString(),
+                        PrevioCallId = resultset["PrevAuditedCallId"].ToString(),
+                        HassClaim = resultset["HAS_CLAIM"].ToString() == "1",
+                        HassCredit = resultset["HAS_CREDIT"].ToString() == "1",
+                        CustSource = resultset["CustSource"].ToString(),
+                        AccountId = resultset["AccountId"].ToString(),
+                        AuditCreationDate = resultset["AuditCreationDate"].ToString(),
+                        AuditResult = resultset["AuditResult"].ToString(),
+                        InvalidQuestions = resultset["InvalidQuestions"].ToString(),
+                        ComentarioAuditor = resultset["Comments"].ToString(),
+                        AuditId = resultset["AuditId"].ToString()
+                    });
+                }
 
             }
             catch (OracleException excep)
@@ -474,8 +500,9 @@ using System.Globalization;namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+                this.oracleBasicsOperations.CloseConnection();
             }
 
             return peddingAudit;

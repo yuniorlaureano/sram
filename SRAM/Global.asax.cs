@@ -5,16 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using SRAM.Utils;
+using Entities;
+using BisnessLogic;
 
 
 namespace SRAM
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-
-        private Security user = new Security();
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -24,8 +22,18 @@ namespace SRAM
         }
 
         protected void Session_Start(object sender, EventArgs e)
-        {
-            user.getWinUserSession();
+        {            
+            string user = HttpContext.Current.User.Identity.Name;
+
+            if (user.Substring(0, 4) == "CSID" && user.Length > 4)
+            {
+                user = user.Substring(5);
+
+                Auditors auditor = new AuditorBusiness().GetAuditorsCredentials(user);
+                Session["UserCode"] = auditor.UserCode;
+                Session["Grp_Codigo"] = auditor.GroupCode;
+                Session["UserName"] = user;
+            }
         }
 
     }

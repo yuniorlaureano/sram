@@ -12,7 +12,7 @@
         getPendingSummary();
         reasignar(function () { window.location = pendingUrl; });
         refreshPending();
-
+        checkAllAssigment();
     }
 
     function audit(onSucess) {
@@ -100,20 +100,15 @@
     }
 
     function getPendingSummary() {
-        var auditor = new Auditor();
-        var url = $("#pedding-audit").data("url");
+        
+        var pendings = $('#pedding-audit .pending-count');
+        var total = 0;
 
-
-        auditor.getPendingResume(url).done(function (response) {
-
-            showColorLoading();
-            if (response.pending) {
-                var output = templates.summary({ summary: response.pending });
-                $("#pending-summary-count").html(output);
-                $(".total-auditar").text(sumSummary(response.pending));
-            }
-            hideColorLoading();
+        $(pendings).each(function (key, value) {
+            total += Number($(value).text());
         });
+
+        $(".total-auditar").text(total);
     }
 
     function sumSummary(summary) {
@@ -214,11 +209,21 @@
         $('#descargo-administrativo').prop("checked", false);
     }
 
+    function checkAllAssigment() {
+        $(".checked-all-assigment").on("click", function () {
+
+            if ($(this).prop("checked")) {
+                $(".checked-assigment").prop("checked",true);
+            } else {
+                $(".checked-assigment").prop("checked", false);
+            }
+        });
+    }
+
     return {
         Init: Init,
         audit: audit,
         getAuditor: getAuditor,
-        getPendingSummary: getPendingSummary,
         reasignar: reasignar
     };
 

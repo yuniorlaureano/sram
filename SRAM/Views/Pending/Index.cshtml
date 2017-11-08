@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Pending";
+    var pendingSummary = Model.GroupBy(p => p.AuditorAsignado).Select(p => new
+        {Auditor = p.Key, Count = p.Count() 
+    }).ToList();
 }
 
 <div class="row">
@@ -55,8 +58,16 @@
                                     <th>Cantidad</th>
                                 </tr>
                             </thead>
-                            <tbody id="pending-summary-count"></tbody>
-                            <tfoot>
+                            <tbody>
+                                @foreach (var ps in pendingSummary)
+                                {
+                                    <tr>
+                                        <td>@ps.Auditor</td>
+                                        <td class="pending-count">@ps.Count</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>                                
                                 <tr>
                                     <td class="text-danger text-right">Total:</td>
                                     <td class="total-auditar text-danger"></td>

@@ -12,6 +12,7 @@ namespace DataAccess.Repository
     {
         private ConnectionManager connectionManager;
         private SqlConnection sqlConnection;
+        private Schema schema;
 
         public SqlBasicOperations()
         {
@@ -25,6 +26,18 @@ namespace DataAccess.Repository
                 if (this.sqlConnection == null)
                 {
                     sqlConnection = new SqlConnection(connectionManager.SetConnectionString(schema));
+                    this.schema = schema;
+                }
+
+                if (this.schema != schema)
+                {
+                    if (this.sqlConnection.State == ConnectionState.Open)
+                    {
+                        this.CloseConnection();
+                    }
+
+                    sqlConnection = new SqlConnection(connectionManager.SetConnectionString(schema));
+                    this.schema = schema;
                 }
 
                 if (this.sqlConnection.State == System.Data.ConnectionState.Closed)
@@ -52,8 +65,7 @@ namespace DataAccess.Repository
                 throw excep;
             }
         }
-
-
+        
         public DataSet ExecuteDataAdapter(string query, SqlParameter[] sqlParameters, CommandType commandType, Schema schema)
         {
             DataSet resultset = new DataSet();
@@ -62,8 +74,9 @@ namespace DataAccess.Repository
             {
                 this.OpenConnection(schema);
                 SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                sqlCommand.CommandType = commandType;
 
-                if (sqlParameters == null)
+                if (sqlParameters != null)
                 {
                     sqlCommand.Parameters.AddRange(sqlParameters);    
                 }
@@ -91,14 +104,14 @@ namespace DataAccess.Repository
             {
                 this.OpenConnection(schema);
                 SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                sqlCommand.CommandType = commandType;
 
-                if (sqlParameters == null)
+                if (sqlParameters != null)
                 {
                     sqlCommand.Parameters.AddRange(sqlParameters);
                 }
 
-                resultset = sqlCommand.ExecuteNonQuery() > 0;
-                
+                resultset = sqlCommand.ExecuteNonQuery() > 0;                
             }
             catch (SqlException excep)
             {
@@ -107,6 +120,31 @@ namespace DataAccess.Repository
             finally
             {
                 this.CloseConnection();
+            }
+
+            return resultset;
+        }
+
+        public SqlDataReader ExecuteDataReader(string query, SqlParameter[] sqlParameters, CommandType commandType, Schema schema)
+        {
+            SqlDataReader resultset = null;
+
+            try
+            {
+                this.OpenConnection(schema);
+                SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                sqlCommand.CommandType = commandType;
+
+                if (sqlParameters != null)
+                {
+                    sqlCommand.Parameters.AddRange(sqlParameters);
+                }
+
+                resultset = sqlCommand.ExecuteReader();
+            }
+            catch (SqlException excep)
+            {
+                throw excep;
             }
 
             return resultset;

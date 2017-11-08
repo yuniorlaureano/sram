@@ -12,30 +12,29 @@ namespace DataAccess
 {
     public class AuditorData
     {
-        OracleBasicsOperations oracleBasicsOperations = null;
         SqlBasicOperations sqlBasicsOperations = null;
         
         public AuditorData()
         {
-            oracleBasicsOperations = new OracleBasicsOperations();
             sqlBasicsOperations = new SqlBasicOperations();
         }
         
-        public List<Auditors>GetAuditors()
+        public Auditors GetAuditorsCredentials(string userName)
         {
-            List<Auditors> auditors = null;
-            DataSet resultset = null;
-            string query = "select usr_codigo, usr_nombre from evaluaciones.dbo.evausrm m where exists (select 1 from evaluaciones.dbo.evausrd d where d.usr_codigo = m.usr_codigo and d.pyc_codigo = 'sra' and d.grp_codigo in ('aud')) and sts_codigo = 'A'";
-
+            Auditors auditor = new Auditors();
+            SqlDataReader resultset = null;
+           
             try
             {
-                resultset = sqlBasicsOperations.ExecuteDataAdapter(query, new SqlParameter[0], CommandType.Text, Schema.GESTION);
-                auditors = resultset.Tables[0].AsEnumerable().Select(
-                    aud => new Auditors
-                    {
-                        UserCode = aud.Field<string>("usr_codigo"),
-                        Name = aud.Field<string>("usr_nombre")
-                    }).ToList();
+                resultset = sqlBasicsOperations.ExecuteDataReader("evaluaciones.sram.sp_get_sram_usr_credentials", new SqlParameter[]{ 
+                    new SqlParameter{ ParameterName = "@usr_name", SqlDbType = SqlDbType.VarChar, Value = userName, Direction = ParameterDirection.Input}
+                }, CommandType.StoredProcedure, Schema.GESTION);
+
+                while (resultset.Read())
+                {
+                    auditor.UserCode = resultset["usr_codigo"].ToString();
+                    auditor.GroupCode = resultset["grp_codigo"].ToString();
+                }
             }
             catch (SqlException excep)
             {                
@@ -45,8 +44,45 @@ namespace DataAccess
             {
                 if (resultset != null)
                 {
-                    resultset.Dispose();
+                    resultset.Close();
                 }
+
+                this.sqlBasicsOperations.CloseConnection();
+            }
+
+            return auditor;
+        }
+
+        public List<Auditors>GetAuditors()
+        {
+            List<Auditors> auditors = new List<Auditors>();
+            SqlDataReader resultset = null;
+
+            try
+            {
+                resultset = sqlBasicsOperations.ExecuteDataReader("evaluaciones.sram.sp_get_sram_auditors", null, CommandType.StoredProcedure, Schema.GESTION);
+
+                while (resultset.Read())
+                {
+                    auditors.Add(new Auditors {
+                        UserCode = resultset["usr_codigo"].ToString(),
+                        Name = resultset["usr_nombre"].ToString()
+                    });
+                    
+                }
+            }
+            catch (SqlException excep)
+            {
+                throw excep;
+            }
+            finally
+            {
+                if (resultset != null)
+                {
+                    resultset.Close();
+                }
+
+                this.sqlBasicsOperations.CloseConnection();
             }
 
             return auditors;
