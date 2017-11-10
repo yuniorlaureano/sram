@@ -43,27 +43,26 @@
                 <table id="pending-table" class="table toggle-circle" data-page-size="10">
                     <thead>
                         <tr>
-                            <th data-sort-ignore="true"></th>
                             <th data-toggle="true" class="footable-first-column">Razón Social</th>
-                            <th>SubscriberId</th>
+                            <th>Subs Id</th>
                             <th>Teléfono</th>
                             <th>Canvass</th>
                             <th>Ejecutivo</th>
                             <th data-hide="phone, tablet">Unidad</th>
                             <th data-hide="phone, tablet">Fecha RCP</th>
-                            <th data-hide="phone, tablet">Cargo</th>
-                            <th data-hide="phone, tablet">Call Id</th>
+                            <th data-hide="phone, tablet">Compañía</th>
+                            <th data-hide="phone, tablet">Status</th>
                             <th data-sort-ignore="true"></th>
-                            <th data-hide="all">Status</th>
+                            <th data-hide="all">Tipo de Servicio</th>
                             <th data-hide="all">Control Verbal Call Id</th>
                             <th data-hide="all">Book Code</th>
-                            <th data-hide="all">Conmentario Ejecutivo</th>
+                            <th data-hide="all">Cargo</th>
+                            <th data-hide="all">Venta</th>                            
                             <th data-hide="all">PDC Dimmas</th>
-                            <th data-hide="all">PDC Codetel</th>
-                            <th data-hide="all">Compañía</th>
-                            <th data-hide="all">Tipo de Servicio</th>
-                            <th data-hide="all">Auditor Asignado</th>
-                            <th data-hide="all">Venta</th>
+                            <th data-hide="all">PDC Codetel</th>                            
+                            <th data-hide="all">Call Id</th>
+                            <th data-hide="all">Conmentario Ejecutivo</th>
+                            <th data-hide="all">Auditor Asignado</th>                            
                             <th data-hide="all">CustSorce</th>
                             <th data-hide="all">Account Id</th>
                             <th data-hide="all">Fecha de la auditoría</th>
@@ -77,9 +76,6 @@
                         @foreach (var item in Model)
                         {
                             <tr data-subscriber="@item.SubscriberId" data-canv-edition="@item.CanvEdition" data-canv-code="@item.Canvass" data-book-code="@item.BookCodeDetail">
-                                <td>
-                                    <input type="checkbox" class="checked-assigment" value="@item.AssignmentId" />
-                                </td>
                                 <td>@item.RazonSocial</td>
                                 <td>@item.SubscriberId</td>
                                 <td>@item.Telefono</td>
@@ -87,8 +83,15 @@
                                 <td>@item.Ejecutivo</td>
                                 <td>@item.Unidad</td>
                                 <td>@item.FechaRPC</td>
-                                <td>@item.Cargo</td>
-                                <td>@item.CallId</td>
+                                <td>@item.Compania</td>
+                                @if (@item.Status == "Auditada")
+                                {
+                                    <td><span class="badge badge-success">@item.Status</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="badge badge-primary">@item.Status</span></td>
+                                }                               
                                 <td>
                                     <div class="btn-group-xs">
                                         @if (@item.HassCredit)
@@ -109,25 +112,16 @@
 
                                     </div>
                                 </td>
-
-                                @if (@item.Status == "Auditada")
-                                {
-                                    <td><span class="label label-table label-success">@item.Status</span></td>
-                                }
-                                else
-                                {
-                                    <td><span class="label label-table label-primary">@item.Status</span></td>
-                                }
-
+                                <td>@item.TipoDeServicio</td>
                                 <td>@item.ControlVerballCallId</td>
                                 <td>@item.BookCodeDetail</td>
-                                <td>@item.ComentarioEjecutivo</td>
+                                <td>@item.Cargo</td>
+                                <td>@item.Venta</td>                                
                                 <td>@item.PDCDimmas</td>
-                                <td>@item.PDCCodetel</td>
-                                <td>@item.Compania</td>
-                                <td>@item.TipoDeServicio</td>
-                                <td>@item.AuditorAsignado</td>
-                                <td>@item.Venta</td>
+                                <td>@item.PDCCodetel</td>                                
+                                <td>@item.CallId</td>   
+                                <td>@item.ComentarioEjecutivo</td>                             
+                                <td>@item.AuditorAsignado</td>                                
                                 <td>@item.CustSource</td>
                                 <td>@item.AccountId</td>
                                 <td>@item.AuditCreationDate</td>
@@ -136,7 +130,7 @@
                                 <td>@item.ComentarioAuditor</td>
                                 @if (item.PrevioCallId != "X")
                                 {
-                                    <td><span class="label label-table label-danger">@item.PrevioCallId</span></td>
+                                    <td><span class="label label-table label-primary">@item.PrevioCallId</span></td>
                                 }
                                 else
                                 {

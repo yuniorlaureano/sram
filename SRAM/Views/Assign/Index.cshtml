@@ -10,6 +10,15 @@
     }).ToList();
 }
 
+@section styles{
+    <style>
+        div.footable-row-detail-name {
+            width: 200px !important;
+        }
+   </style>
+
+}
+
 <div class="row">
     <div class="col-sm-12">
         <!-- Row selection and deletion (multiple rows) -->
@@ -23,7 +32,7 @@
                 {
                     <div class="alert alert-primary col-sm-12 text-center" style="font-size:15px;">
                         <button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button>
-                        <strong>Info!</strong> Se asignaron un total de, @ViewBag.totalAsignado cuentas. : )
+                        <strong>Info!</strong> RDV asignado exitosamente. Se asignaron un total de: @ViewBag.totalAsignado cuentas. : )
                     </div>
                 }
 
@@ -69,7 +78,7 @@
     <div class="col-sm-12">
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">Pendientes a Auditar</h3>
+                <h3 class="panel-title">Pendientes</h3>
             </div>
             <div class="panel-body">
 
@@ -101,7 +110,7 @@
                 <table id="pending-table" class="table toggle-circle" data-page-size="10">
                     <thead>
                         <tr>
-                            <th data-toggle="true" class="footable-first-column">SubscriberId</th>
+                            <th data-toggle="true" class="footable-first-column">Subs Id</th>
                             <th>Subscriber Name</th>
                             <th>Teléfono</th>
                             <th>Canvass</th>

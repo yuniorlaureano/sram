@@ -7,9 +7,9 @@ using Entities;
 using DataAccess.Repository;
 using System.Data;
 using Oracle.ManagedDataAccess.Client;
+using System.Globalization;
 
-
-using System.Globalization;namespace DataAccess
+namespace DataAccess
 {
     public class AuditoriaData
     {
@@ -95,43 +95,7 @@ using System.Globalization;namespace DataAccess
 
             return auditoria;
         }
-
-        /// <summary>
-        /// Obtiene un resumen de las auditorias, un resument por auditor
-        /// </summary>
-        /// <param name="UserCode"></param>
-        /// <param name="SalesDate"></param>
-        /// <returns>List<AuditoriaResume></returns>
-        public List<AuditoriaResume> GetPendingAuditResume(string UserCode, string SalesDate)
-        {
-            List<Auditoria> auditoria = this.GetPendingAudit(UserCode, SalesDate);
-            IEnumerable<AuditoriaResume> peddingResume = null;
-
-            try
-            {
-                 peddingResume = from r in auditoria
-                                    group r by new
-                                    {
-                                        Name = r.AuditorAsignado,
-                                    } into g
-                                    select new AuditoriaResume
-                                    {
-                                         Name = g.Key.Name,
-                                         Count = g.Count()
-                                    }; 
-            }
-            catch (OracleException excep)
-            {
-                throw excep;
-            }
-            finally
-            {
-                auditoria = null;
-            }
-
-            return peddingResume.ToList();
-        }
-
+        
         /// <summary>
         /// Permite obtener las auditorias que aun no han sido asignadas
         /// </summary>
@@ -243,20 +207,26 @@ using System.Globalization;namespace DataAccess
         /// <param name="Auditor"></param>
         /// <param name="UserCode"></param>
         /// <returns>bool</returns>
-        
-        public bool ReAssignAudit(string sentencia)
+        public bool ReAssignAudit(List<string> sentencias)
         {
             bool resultset = false;
+            int count = 0;
 
             OracleParameter[] oracleParameter = new OracleParameter[] { 
-                new OracleParameter("in_sentencia", OracleDbType.Int32) { Value = sentencia , OracleDbType = OracleDbType.Varchar2 },
+                new OracleParameter("in_sentencia", OracleDbType.Int32) { OracleDbType = OracleDbType.Varchar2 },
                 new OracleParameter("resultset", OracleDbType.Int32) { Direction = ParameterDirection.Output, OracleDbType = OracleDbType.Int32}
             };
 
             try
             {
-                oracleBasicsOperations.ExecuteNonQuery("sram.sp_assign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
-                resultset = Convert.ToInt32(oracleParameter[1].Value.ToString()) > 0;
+                foreach (string s in sentencias)
+                {
+                    oracleParameter[0].Value = s;
+                    oracleBasicsOperations.ExecuteNonQuery("sram.sp_reassign", oracleParameter, CommandType.StoredProcedure, Schema.SFA);
+                    count += Convert.ToInt32(oracleParameter[1].Value.ToString());   
+                }
+
+                resultset = (count > 0);                
             }
             catch (OracleException excep)
             {

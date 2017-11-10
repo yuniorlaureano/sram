@@ -5,6 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section styles{
+    <style>
+        div.footable-row-detail-name {
+            width: 200px !important;
+        }
+    </style>
+    }
+
 <div class="row">
     <div class="col-sm-12">
         @if (ViewBag.Error != null)

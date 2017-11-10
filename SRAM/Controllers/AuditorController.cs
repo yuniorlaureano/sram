@@ -25,17 +25,5 @@ namespace SRAM.Controllers
             var auditors = new AuditorBusiness().GetAuditors();
             return Json(new { auditors = auditors }, JsonRequestBehavior.AllowGet);
         }
-
-        /// <summary>
-        /// Obtiene un resume de los auditorias asignadas que tiene cada auditor
-        /// </summary>
-        /// <param name="userCode"></param>
-        /// <param name="salesDate"></param>
-        /// <returns>JsonResult</returns>
-        public JsonResult GetPendingAudResume(string userCode, string salesDate)
-        {
-            List<Entities.AuditoriaResume> peddingResume = new AuditoriaBusiness().GetPendingAuditResume(userCode, salesDate);
-            return Json(new { pending = peddingResume }, JsonRequestBehavior.AllowGet);
-        }
 	}
 }

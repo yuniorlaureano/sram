@@ -7,6 +7,14 @@
     }).ToList();
 }
 
+@section styles{
+    <style>
+        div.footable-row-detail-name {
+            width: 200px !important;
+        }
+    </style>
+}
+
 <div class="row">
 
     @if (Session["Grp_Codigo"].ToString().Equals("adm"))

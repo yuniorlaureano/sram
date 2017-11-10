@@ -14,12 +14,7 @@ namespace BisnessLogic
         {
             return new AuditoriaData().GetPendingAudit(serCode, salesDate) ;
         }
-
-        public List<AuditoriaResume> GetPendingAuditResume(string UserCode, string SalesDate)
-        {
-            return new AuditoriaData().GetPendingAuditResume(UserCode, SalesDate);
-        }
-
+        
         public List<UnAssignedAudit> GetUnAssignedAudit()
         {
             return new AuditoriaData().GetUnAssignedAudit();
@@ -44,23 +39,23 @@ namespace BisnessLogic
 
             foreach (var item in assigmentId)
             {
+                count += 1;
                 sentencia += "select '" + item + "' as assignment_id, '" + userCode + "' as user_code, '" + userAssigned + "' as user_assigned from dual union ";
 
                 if (count == 20)
                 {
                     sentencias.Add(sentencia.Substring(0, sentencia.Length - 7));
+                    sentencia = string.Empty;
                     count = 0;
-                }
+                }                
             }
 
-            if (sentencias.Count > 0 && count > 0 && count < 20)
+            if (count > 0 && count < 20)
             {
                 sentencias.Add(sentencia.Substring(0, sentencia.Length - 7));
             }
 
-            sentencia = sentencia.Substring(0, sentencia.Length - 7);
-
-            return auditoriaData.ReAssignAudit(sentencia);//hacer que el metodo reciva una lista y la ejecute con una transaccion.
+            return auditoriaData.ReAssignAudit(sentencias);
         }
 
         public List<PenddingAudit> GetAcctInfoByAssignment(string AssignmentId)

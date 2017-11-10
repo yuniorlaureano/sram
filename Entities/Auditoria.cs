@@ -18,7 +18,19 @@ namespace Entities
         public string Venta { get; set; }
         public string Ejecutivo { get; set; }
         public string Unidad { get; set; }
-        public string FechaRPC { get; set; }
+        private string fechaRPC;
+        public string FechaRPC 
+        {
+            get
+            { 
+                return fechaRPC; 
+            } 
+            set 
+            {
+                fechaRPC = (value != null ? Convert.ToDateTime(value).ToString("MM/dd/yyyy"): value);
+            }
+        }
+
         public string Cargo { get; set; }
         public string CallId { get; set; }
         public string ControlVerballCallId { get; set; }
@@ -33,7 +45,19 @@ namespace Entities
         public string CustSource { get; set; }
         public string AccountId { get; set; }
         public string Status { get; set; }
-        public string AuditCreationDate { get; set; }
+        private string auditCreationDate;
+        public string AuditCreationDate
+        {
+            get
+            {
+                return auditCreationDate;
+            }
+            set
+            {
+                auditCreationDate = (value != null ? Convert.ToDateTime(value).ToString("MM/dd/yyyy") : value);
+            }
+        }
+
         public string AuditorName { get; set; }
         public string AuditResult { get; set; }
         public string InvalidQuestions { get; set; }
