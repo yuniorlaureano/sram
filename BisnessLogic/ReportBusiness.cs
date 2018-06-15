@@ -108,6 +108,10 @@ namespace BisnessLogic
 
 
             ws.Column("B").Width = 17;
+            ws.Column("C").Width = 20;
+            ws.Column("D").Width = 14;
+
+            ws.Row(3).Height = 30;
 
             int count = listaPorUnidad.Count - 1;
             for (int i = 0; i <= count; i++)
@@ -134,8 +138,17 @@ namespace BisnessLogic
                 if (listaPorUnidad[i].Calificacion == "Total por unidad:")
                 {
                     ws.Range("A" + (row) + ":E" + (row) + "").Cells().Style.Font.Bold = true;
+
+
+
                     if (i != count)
                     {
+                        ws.Range("A" + (row) + ":E" + (row) + "").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
+                        ws.Range("A" + (row) + ":E" + (row) + "").Cells().Style.Border.BottomBorderColor = XLColor.DarkBlue;
+
+                        ws.Range("A" + (row) + ":E" + (row) + "").Cells().Style.Border.TopBorder = XLBorderStyleValues.Thick;
+                        ws.Range("A" + (row) + ":E" + (row) + "").Cells().Style.Border.TopBorderColor = XLColor.DarkBlue;
+
                         ws.Cell(row, 2).Value = listaPorUnidad[i].Calificacion;
                     }
                     else
@@ -154,23 +167,32 @@ namespace BisnessLogic
             }
 
             ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorder = XLBorderStyleValues.Thick;
-            ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorderColor = XLColor.DarkBlue;
+            ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorderColor = XLColor.Black;
 
-            ws.Range("E2:E" + (count + 3) + "").Rows().Style.Border.RightBorder = XLBorderStyleValues.Thick;
-            ws.Range("E2:E" + (count + 3) + "").Rows().Style.Border.RightBorderColor = XLColor.DarkBlue;
+            ws.Range("E3:E" + (count + 3) + "").Rows().Style.Border.RightBorder = XLBorderStyleValues.Thick;
+            ws.Range("E3:E" + (count + 3) + "").Rows().Style.Border.RightBorderColor = XLColor.Black;
+
+            ws.Range("A3:E3").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
+            ws.Range("A3:E3").Cells().Style.Border.BottomBorderColor = XLColor.Black;
+
+            ws.Range("A2:E2").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
+            ws.Range("A2:E2").Cells().Style.Border.BottomBorderColor = XLColor.Black;
 
             ws.Range("A" + (count + 3) + ":E" + (count + 3) + "").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
             ws.Range("A" + (count + 3) + ":E" + (count + 3) + "").Cells().Style.Border.BottomBorderColor = XLColor.DarkBlue;
 
-            ws.Range("A2:E3").Cells().Style.Fill.BackgroundColor = XLColor.DarkBlue;
-            ws.Range("A3:E3").Cells().Style.Font.FontColor = XLColor.White;
+            //ws.Range("A2:E3").Cells().Style.Fill.BackgroundColor = XLColor.DarkBlue;
+            //ws.Range("A3:E3").Cells().Style.Font.FontColor = XLColor.White;
+            ws.Cells().Style.Font.FontName = "Cambria";
+            ws.Row(3).Style.Font.Bold = true;
+            ws.Row(3).Style.Font.FontSize = 11;
+            ws.Row(3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Row(3).Style.Alignment.WrapText = true;
+
             ws.Column("D").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-
-
 
             wb.SaveAs(file);
             wb.Dispose();
-            //HttpContext.Current.Session["reportePorUnidadPath"] = file;
 
         }
 
@@ -190,6 +212,7 @@ namespace BisnessLogic
             ws.Range("A1:O1").Merge();
             ws.Cell(1, 1).Style.Font.FontSize = 18;
             ws.Cell(1, 1).Style.Font.Bold = true;
+
 
             ws.Cell(2, 8).Value = "Número de inicidencias en No Cumplimiento de Datos";
             ws.Cell(2, 8).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -246,6 +269,7 @@ namespace BisnessLogic
             ws.Column("N").Style.Alignment.WrapText = true;
             ws.Column("O").Width = 9;
             ws.Column("O").Style.Alignment.WrapText = true;
+            ws.Row(1).Height = 30;
 
             int count = listaPorDatoVital.Count - 1;
             for (int i = 0; i <= count; i++)
@@ -316,28 +340,36 @@ namespace BisnessLogic
                 {
                     ws.Range("N4:N" + (count + 4) + "").Columns().Style.Font.FontColor = XLColor.Red;
                 }
-            }            
+            }
 
-            ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorder = XLBorderStyleValues.Thick;
+            ws.Range("H3:H" + (count + 3) + "").Rows().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+            ws.Range("H3:H" + (count + 3) + "").Rows().Style.Border.LeftBorderColor = XLColor.DarkBlue;
+
+            ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorder = XLBorderStyleValues.Thin;
             ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorderColor = XLColor.DarkBlue;
 
-            ws.Range("O3:O" + (count + 3) + "").Rows().Style.Border.RightBorder = XLBorderStyleValues.Thick;
-            ws.Range("O3:O" + (count + 3) + "").Rows().Style.Border.RightBorderColor = XLColor.Red;
+            ws.Range("O3:O" + (count + 3) + "").Rows().Style.Border.RightBorder = XLBorderStyleValues.Thin;
+            ws.Range("O3:O" + (count + 3) + "").Rows().Style.Border.RightBorderColor = XLColor.Black;
 
-            ws.Range("A" + (count + 3) + ":G" + (count + 3) + "").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
+            ws.Range("A" + (count + 3) + ":G" + (count + 3) + "").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thin;
             ws.Range("A" + (count + 3) + ":G" + (count + 3) + "").Cells().Style.Border.BottomBorderColor = XLColor.DarkBlue;
 
-            ws.Range("F" + (count + 3) + ":O" + (count + 3) + "").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
-            ws.Range("F" + (count + 3) + ":O" + (count + 3) + "").Cells().Style.Border.BottomBorderColor = XLColor.DarkBlue;
+            ws.Range("F" + (count + 3) + ":O" + (count + 3) + "").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            ws.Range("F" + (count + 3) + ":O" + (count + 3) + "").Cells().Style.Border.BottomBorderColor = XLColor.Black;
 
-            ws.Range("A3:G3").Cells().Style.Fill.BackgroundColor = XLColor.DarkBlue;
-            ws.Range("A3:G3").Cells().Style.Font.FontColor = XLColor.White;
+            ws.Range("H2:O2").Cells().Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            ws.Range("H2:O2").Cells().Style.Border.OutsideBorderColor = XLColor.Black;
 
-            ws.Range("H3:O3").Cells().Style.Fill.BackgroundColor = XLColor.Red;
-            ws.Range("H3:O3").Cells().Style.Font.FontColor = XLColor.White;
+            //ws.Range("A3:G3").Cells().Style.Fill.BackgroundColor = XLColor.DarkBlue;
+            //ws.Range("A3:G3").Cells().Style.Font.FontColor = XLColor.White;
 
-
-
+            ws.Range("H3:O3").Cells().Style.Fill.BackgroundColor = XLColor.LightGray;
+            //ws.Range("H3:O3").Cells().Style.Font.FontColor = XLColor.White;
+            ws.Row(3).Style.Alignment.WrapText = true;
+            ws.Row(3).Style.Font.FontSize = 11;
+            ws.Range("A3:O3").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            ws.Range("A3:O3").Style.Border.OutsideBorderColor = XLColor.Black;
+            ws.Cells().Style.Font.FontName = "Cambria";
             wb.SaveAs(file);
             wb.Dispose();
         }
@@ -426,22 +458,31 @@ namespace BisnessLogic
             ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorder = XLBorderStyleValues.Thick;
             ws.Range("A3:A" + (count + 3) + "").Rows().Style.Border.LeftBorderColor = XLColor.DarkBlue;
 
-            ws.Range("E2:E" + (count + 3) + "").Rows().Style.Border.RightBorder = XLBorderStyleValues.Thick;
-            ws.Range("E2:E" + (count + 3) + "").Rows().Style.Border.RightBorderColor = XLColor.DarkBlue;
+            ws.Range("E3:E" + (count + 3) + "").Rows().Style.Border.RightBorder = XLBorderStyleValues.Thick;
+            ws.Range("E3:E" + (count + 3) + "").Rows().Style.Border.RightBorderColor = XLColor.Black;
 
             ws.Range("A" + (count + 3) + ":E" + (count + 3) + "").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
-            ws.Range("A" + (count + 3) + ":E" + (count + 3) + "").Cells().Style.Border.BottomBorderColor = XLColor.DarkBlue;
+            ws.Range("A" + (count + 3) + ":E" + (count + 3) + "").Cells().Style.Border.BottomBorderColor = XLColor.Black;
 
-            ws.Range("A2:E3").Cells().Style.Fill.BackgroundColor = XLColor.DarkBlue;
-            ws.Range("A3:E3").Cells().Style.Font.FontColor = XLColor.White;
+            ws.Range("A3:E3").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
+            ws.Range("A3:E3").Cells().Style.Border.BottomBorderColor = XLColor.Black;
+
+            ws.Range("A2:E2").Cells().Style.Border.BottomBorder = XLBorderStyleValues.Thick;
+            ws.Range("A2:E2").Cells().Style.Border.BottomBorderColor = XLColor.DarkBlue;
+
+            //ws.Range("A2:E3").Cells().Style.Fill.BackgroundColor = XLColor.DarkBlue;
+            //ws.Range("A3:E3").Cells().Style.Font.FontColor = XLColor.White;
+            ws.Cells().Style.Font.FontName = "Cambria";
             ws.Column("E").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
-
+            ws.Row(3).Style.Font.Bold = true;
+            ws.Row(3).Style.Font.FontSize = 11;
+            ws.Row(3).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+            ws.Row(3).Style.Alignment.WrapText = true;
 
             //ws.Range("E4:E" + (count + 3)).Cells().DataType = XLCellValues.Number;
 
             wb.SaveAs(file);
             wb.Dispose();
-            //HttpContext.Current.Session["reportePorAssesorPath"] = file;
 
         }
 
