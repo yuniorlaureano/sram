@@ -40,5 +40,10 @@
     
     SubscriberModule.getClaim();
     SubscriberModule.getCredit();
+
+    $("#search-audit").on("submit", function () {
+        
+        showColorLoading();
+    });
         
 });

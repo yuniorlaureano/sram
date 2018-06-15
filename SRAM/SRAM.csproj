@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1450,7 +1451,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Content\img\flags\united-kingdom.png.tmp" />
     <Content Include="Content\themify-icons\fonts\themify.eot" />
     <Content Include="Content\themify-icons\fonts\themify.ttf" />
     <Content Include="Content\themify-icons\fonts\themify.woff" />
@@ -1622,6 +1622,7 @@
     <Content Include="css\demo\fonts\nifty-demo-icons.ttf" />
     <Content Include="css\demo\fonts\nifty-demo-icons.woff" />
     <Content Include="css\demo\fonts\nifty-demo-icons.woff2" />
+    <None Include="Properties\PublishProfiles\sram-profile.pubxml" />
     <None Include="Properties\PublishProfiles\SRAM.pubxml" />
     <None Include="Properties\PublishProfiles\SRAM_RD.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
